@@ -16,6 +16,7 @@ start an environment
 
 ```bash
 python -mvenv env
+pip install -e .
 . ./env/bin/activate
 pip install -r requires/development.txt
 ```
