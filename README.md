@@ -12,6 +12,16 @@ The idea is an system where you can rsvp with yes or no to an event entirely thr
 
 Requires docker and python>=3.7
 
+start an environment
+
+```bash
+python -mvenv env
+. ./env/bin/activate
+pip install -r requires/development.txt
+```
+
+boostrap docker containers, environment variables and start the app
+
 ```bash
 . ./startup
 python server/app.py
