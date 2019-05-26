@@ -1,4 +1,4 @@
-# Bench App
+# Please RSVP
 
 proof of concept for an idea for RSVP'ing to things via email.
 Inspired by a number of things for my hockey teams
