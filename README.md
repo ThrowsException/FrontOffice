@@ -28,7 +28,7 @@ boostrap docker containers, environment variables and start the app
 python server/app.py
 ```
 
-There is currently only two endpoints for the PoC `/invite` and `/{id}`
+There is currently only two endpoints for the PoC `/invite` and `/invite/{id}`
 
 ### POST /invite
 
@@ -47,6 +47,10 @@ response
 { "id": 1 }
 ```
 
-### GET /{id}
+### GET /invite/{id}
 
 clicking the link marks the invite as accepted
+
+### GET /status
+
+Health check

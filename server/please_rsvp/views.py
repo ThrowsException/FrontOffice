@@ -13,11 +13,16 @@ def __send_invite(email, code):
     return web.Response(text='Thanks')
 
 
+async def status(request):
+    return web.Response(text='Healthy')
+
+
 async def rsvp(request):
-    id = request.match_info.get('id')
+    invite_id = request.match_info.get('id')
     async with request.app['db_pool'].acquire() as conn:
         async with conn.cursor() as cur:
-            sql = "UPDATE invites SET reply = 't' WHERE id = {}".format(id)
+            sql = "UPDATE invites SET reply = 't' WHERE id = {}".format(
+                invite_id)
             await cur.execute(sql)
     return web.Response(text='THANKS')
 

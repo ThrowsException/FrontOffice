@@ -1,6 +1,6 @@
 import pytest
 
-from server.app import make_app
+from please_rsvp.app import make_app
 
 
 @pytest.fixture
@@ -10,14 +10,19 @@ def cli(loop, aiohttp_client):
 
 
 async def test_get_value(cli):
-    resp = await cli.get('/')
+    resp = await cli.get('/status')
     assert resp.status == 200
-    assert await resp.text() == 'Hello, Anonymous'
+    assert await resp.text() == 'Healthy'
 
-#
-# async def test_get_invite(cli):
-#     resp = await cli.get('/invite')
-#     assert resp.status == 200
+
+async def test_get_invite(cli):
+    invite = await cli.post(
+        '/invite',
+        json={'email': 'test@bar.com', 'team': 'testteam'})
+
+    invite_resp = await invite.json()
+    resp = await cli.get(f'/invite/{invite_resp["id"]}')
+    assert resp.status == 200
 
 
 async def test_post_invite(cli):

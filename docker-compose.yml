@@ -24,3 +24,8 @@ services:
     ports:
       - 1025
       - 8025
+
+  service:
+    image: rsvp:latest
+    ports:
+      - "8080:8080"
