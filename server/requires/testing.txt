@@ -8,3 +8,4 @@ flake8-comprehensions
 flake8-print
 pytest
 pytest-aiohttp
+pytest-cov

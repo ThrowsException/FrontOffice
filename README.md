@@ -16,16 +16,16 @@ start an environment
 
 ```bash
 python -mvenv env
-pip install -e .
+pip install -e server/.
 . ./env/bin/activate
-pip install -r requires/development.txt
+pip install -r server/requires/development.txt
 ```
 
 boostrap docker containers, environment variables and start the app
 
 ```bash
 . ./startup
-python server/app.py
+python server/please_rsvp/app.py
 ```
 
 There is currently only two endpoints for the PoC `/invite` and `/invite/{id}`

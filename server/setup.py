@@ -11,10 +11,10 @@ def read_requires():
 setup(name='please_rsvp',
       version='0.0.1',
       description='My App',
-      packages=find_packages(),
+      packages=['please_rsvp'],
       include_package_data=True,
       install_requires=read_requires(),
       zip_safe=False,
       entry_points={
-          'console_scripts': ['please-rsvp=please_rsvp.app:main'],
+          'console_scripts': ['please-rsvp=please_rsvp.__main__'],
       })

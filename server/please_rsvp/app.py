@@ -19,10 +19,5 @@ def make_app():
     setup_routes(app)
     return app
 
-
-def main():
+if __name__ == "__main__":
     web.run_app(make_app())
-
-
-if __name__ == '__main__':
-    main()

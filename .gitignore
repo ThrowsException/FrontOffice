@@ -22,5 +22,17 @@ share/python-wheels/
 *.egg-info/
 *.egg
 
+
+# Unit test / coverage reports
+htmlcov/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.pytest_cache/
+
+
 env/
 .python-version
