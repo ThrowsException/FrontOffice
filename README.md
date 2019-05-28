@@ -28,7 +28,7 @@ boostrap docker containers, environment variables and start the app
 python server/app.py
 ```
 
-There is currently only two endpoints for the PoC `/invite` and '/{id}'
+There is currently only two endpoints for the PoC `/invite` and `/{id}`
 
 ### POST /invite
 
