@@ -6,6 +6,7 @@ flake8-builtins
 flake8-quotes
 flake8-comprehensions
 flake8-print
+mypy
 pytest
 pytest-aiohttp
 pytest-cov

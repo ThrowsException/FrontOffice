@@ -33,6 +33,9 @@ coverage.xml
 *.cover
 .pytest_cache/
 
+# mypy
+.mypy_cache/
+
 
 env/
 .python-version
