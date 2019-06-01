@@ -10,8 +10,9 @@ docker-compose up -d db adminer smtp
 
 export POSTGRES_HOST=localhost
 export POSTGRES_PORT=$(get_docker_port db 5432)
+export SMTP_HOST=localhost
 export SMTP_PORT=$(get_docker_port smtp 1025)
 
 if [ "$1" = "service" ]; then
-  docker-compose up -d service
+  docker-compose up -d --build service
 fi
