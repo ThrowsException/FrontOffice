@@ -1,4 +1,4 @@
-from setuptools import setup    # type: ignore
+from setuptools import setup, find_packages    # type: ignore
 
 
 def read_requires():
@@ -11,7 +11,7 @@ def read_requires():
 setup(name='please_rsvp',
       version='0.0.1',
       description='My App',
-      packages=['please_rsvp'],
+      packages=find_packages(),
       include_package_data=True,
       install_requires=read_requires(),
       zip_safe=False,

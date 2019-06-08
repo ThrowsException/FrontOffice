@@ -11,8 +11,7 @@ CREATE TABLE events (
 
 CREATE TABLE invites (
   id bigserial PRIMARY KEY,
-  email char(256),
-  team text,
+  email text,
   reply boolean,
   event bigint REFERENCES events NOT NULL
 );
