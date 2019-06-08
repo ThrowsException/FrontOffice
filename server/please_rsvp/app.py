@@ -1,12 +1,12 @@
 import os
 
 from aiohttp import web
-import aiopg  # type: ignore
+import aiopg    # type: ignore
 
 from please_rsvp.routes import setup_routes
 
 
-async def create_aiopg(app):
+async def create_aiopg(app: web.Application):
     HOST = os.getenv('POSTGRES_HOST', 'db')
     PORT = os.getenv('POSTGRES_PORT', '5432')
     dns = f'postgres://postgres:example@{HOST}:{PORT}?application_name=app'

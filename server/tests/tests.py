@@ -16,9 +16,22 @@ async def test_get_value(cli):
 
 
 async def test_get_invite(cli):
-    invite = await cli.post(
-        '/invite',
-        json={'email': 'test@bar.com', 'team': 'testteam'})
+    resp = await cli.post('/groups', json={'name': 'Spitfires'})
+    group_resp = await resp.json()
+
+    event = await cli.post('/events',
+                           json={
+                               'name': 'Game',
+                               'group': group_resp['id']
+                           })
+    event_resp = await event.json()
+
+    invite = await cli.post('/invite',
+                            json={
+                                'email': 'test@bar.com',
+                                'team': 'testteam',
+                                'event': event_resp['id']
+                            })
 
     invite_resp = await invite.json()
     resp = await cli.get(f'/invite/{invite_resp["id"]}')
@@ -26,7 +39,37 @@ async def test_get_invite(cli):
 
 
 async def test_post_invite(cli):
-    resp = await cli.post(
-        '/invite',
-        json={'email': 'foo@bar.com', 'team': 'team1'})
+    resp = await cli.post('/groups', json={'name': 'Spitfires'})
+    group_resp = await resp.json()
+
+    event = await cli.post('/events',
+                           json={
+                               'name': 'Game',
+                               'group': group_resp['id']
+                           })
+    event_resp = await event.json()
+
+    invite = await cli.post('/invite',
+                            json={
+                                'email': 'test@bar.com',
+                                'team': 'testteam',
+                                'event': event_resp['id']
+                            })
+    assert invite.status == 200
+
+
+async def test_post_group(cli):
+    resp = await cli.post('/groups', json={'name': 'Spitfires'})
+    assert resp.status == 200
+
+
+async def test_post_event(cli):
+    resp = await cli.post('/groups', json={'name': 'Spitfires'})
+    group = await resp.json()
+
+    resp = await cli.post('/events',
+                          json={
+                              'name': 'Game',
+                              'group': group['id']
+                          })
     assert resp.status == 200

@@ -1,4 +1,4 @@
-from setuptools import setup  # type: ignore
+from setuptools import setup    # type: ignore
 
 
 def read_requires():
