@@ -24,7 +24,7 @@ pip install -r server/requires/development.txt
 boostrap docker containers, environment variables and start the app
 
 ```bash
-. ./startup
+./startup && source ./build/test_env
 python server/please_rsvp/app.py
 ```
 

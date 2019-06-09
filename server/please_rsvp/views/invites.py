@@ -37,7 +37,7 @@ class InviteView(web.View):
         async with self.request.app['db_pool'].acquire() as conn:
             async with conn.cursor() as cur:
                 sql = dedent("""
-                    SELECT m.id, m.team, e.id, m.email
+                    SELECT e.id, m.id, m.email
                     FROM events e
                     JOIN members m USING (team)
                     WHERE e.id = '{}'
@@ -48,20 +48,15 @@ class InviteView(web.View):
                 needs_invite = []
                 for record in results:
                     sql = dedent("""
-                        INSERT INTO invites (team, event, member, reply)
-                        VALUES ('{}', '{}', '{}', 'false') RETURNING id
-                    """.format(record[1], record[2], record[0]))
+                        INSERT INTO invites (event, member, reply)
+                        VALUES ('{}', '{}', 'false') RETURNING id
+                    """.format(record[0], record[1]))
                     await cur.execute(sql)
                     result = await cur.fetchone()
 
-                    needs_invite.append({'email': record[3], 'code': result[0]})
-
-                    # await cur.execute(
-                    #     'SELECT email from members where id = {}'.format(
-                    #         body['member']))
-                    # email = await cur.fetchone()
+                    needs_invite.append({'email': record[2], 'code': result[0]})
 
                 for record in needs_invite:
                     self.__send_invite(**record)
 
-                return web.json_response({'status': 'Invites sent'})
+        return web.json_response({'status': 'Invites sent'})

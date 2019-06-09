@@ -21,6 +21,5 @@ CREATE TABLE invites (
   id bigserial PRIMARY KEY,
   reply boolean,
   event bigint REFERENCES events NOT NULL,
-  team bigint REFERENCES teams NOT NULL,
   member bigint REFERENCES members NOT NULL
 );

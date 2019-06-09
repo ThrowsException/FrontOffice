@@ -2,7 +2,43 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import wretch from "wretch";
 
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Grid from "@material-ui/core/Grid";
+
+import "typeface-roboto";
+
+const FormButton = withStyles({
+  root: {
+    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 75%)",
+    borderRadius: 3,
+    border: 0,
+    color: "white",
+    height: 48,
+    padding: "0 30px",
+    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)"
+  },
+  label: {
+    textTransform: "capitalize"
+  }
+})(Button);
+
+const useStyles = makeStyles(theme => ({
+  container: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 200
+  }
+}));
+
 const Home = () => {
+  const classes = useStyles();
   const [teams, setTeams] = useState([]);
   const [events, setEvents] = useState([]);
   const [members, setMembers] = useState([]);
@@ -13,8 +49,8 @@ const Home = () => {
     name: "",
     email: "",
     phone: "",
-    team_id: 0,
-    event_id: 0
+    team_id: "",
+    event_id: ""
   });
 
   const fetchData = async (url, callback) => {
@@ -75,71 +111,102 @@ const Home = () => {
 
   return (
     <>
-      {teams && (
-        <div>
-          <b>No Teams! Make One</b>
-          <div>
-            <label>Name:</label>
-            <input name="team" onChange={handleInputChange} value={form.team} />
-          </div>
-          <button onClick={createTeam}>Create Group</button>
-        </div>
-      )}
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          {teams && (
+            <Box>
+              <h1>Create A Team</h1>
+              <div>
+                <TextField
+                  label="Team Name"
+                  name="team"
+                  onChange={handleInputChange}
+                  value={form.team}
+                  className={classes.textField}
+                />
+              </div>
+              <FormButton variant="contained" onClick={createTeam}>
+                Create Team
+              </FormButton>
+            </Box>
+          )}
+        </Grid>
 
-      {events && (
-        <div>
-          <b>No Events! Make One</b>
-          <div>
-            <label>Name:</label>
-            <input
-              name="event"
-              onChange={handleInputChange}
-              value={form.event}
-            />
-            <label>Team:</label>
-            <input
-              name="team_id"
-              onChange={handleInputChange}
-              value={form.team_id}
-            />
-          </div>
-          <button onClick={createEvent}>Create Event</button>
-        </div>
-      )}
+        <Grid item xs={12}>
+          {members && (
+            <div>
+              <h1>Add Member</h1>
+              <div>
+                <TextField
+                  label="Name"
+                  name="name"
+                  onChange={handleInputChange}
+                  value={form.name}
+                  className={classes.textField}
+                />
+                <TextField
+                  label="Email"
+                  name="email"
+                  onChange={handleInputChange}
+                  value={form.email}
+                  className={classes.textField}
+                />
+                <TextField
+                  label="Phone"
+                  name="phone"
+                  onChange={handleInputChange}
+                  value={form.phone}
+                  className={classes.textField}
+                />
+                <TextField
+                  label="Team Id"
+                  name="team_id"
+                  onChange={handleInputChange}
+                  value={form.team_id}
+                  className={classes.textField}
+                />
+              </div>
+              <FormButton variant="contained" onClick={createMember}>
+                Create Member
+              </FormButton>
+            </div>
+          )}
+        </Grid>
 
-      {members && (
-        <div>
-          <b>No Members! Make One</b>
-          <div>
-            <label>Name:</label>
-            <input name="name" onChange={handleInputChange} value={form.name} />
-            <label>Email:</label>
-            <input
-              name="email"
-              onChange={handleInputChange}
-              value={form.email}
-            />
-            <label>Phone:</label>
-            <input
-              name="phone"
-              onChange={handleInputChange}
-              value={form.phone}
-            />
-            <label>Team:</label>
-            <input
-              name="team_id"
-              onChange={handleInputChange}
-              value={form.team_id}
-            />
-            <button onClick={createMember}>Create Member</button>
-          </div>
-        </div>
-      )}
+        <Grid item xs={12}>
+          {events && (
+            <Box>
+              <h1>Create an Event</h1>
+              <div>
+                <TextField
+                  label="Event Name"
+                  name="event"
+                  onChange={handleInputChange}
+                  value={form.event}
+                  className={classes.textField}
+                />
+                <TextField
+                  label="Team Id"
+                  name="team_id"
+                  onChange={handleInputChange}
+                  value={form.team_id}
+                  className={classes.textField}
+                />
+              </div>
+              <FormButton variant="contained" onClick={createEvent}>
+                Create Event
+              </FormButton>
+            </Box>
+          )}
+        </Grid>
 
-      <div>Form: {JSON.stringify(form)}</div>
-      <div>Teams: {JSON.stringify(teams)}</div>
-      <div>Events: {JSON.stringify(events)}</div>
-      <div>Members: {JSON.stringify(members)}</div>
+        <Grid item>
+          <div>Form: {JSON.stringify(form)}</div>
+          <div>Teams: {JSON.stringify(teams)}</div>
+          <div>Events: {JSON.stringify(events)}</div>
+          <div>Members: {JSON.stringify(members)}</div>
+        </Grid>
+      </Grid>
     </>
   );
 };

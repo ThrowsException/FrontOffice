@@ -15,15 +15,20 @@
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
+    "css-loader": "^2.1.1",
+    "file-loader": "^4.0.0",
     "html-webpack-plugin": "^4.0.0-beta.5",
+    "style-loader": "^0.23.1",
     "webpack": "^4.32.2",
     "webpack-cli": "^3.3.2",
     "webpack-dev-server": "^3.5.1"
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
+    "@material-ui/core": "^4.0.0-rc.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "typeface-roboto": "0.0.54",
     "wretch": "^1.5.2"
   }
 }
