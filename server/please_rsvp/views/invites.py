@@ -7,7 +7,9 @@ from aiohttp import web
 
 class InviteView(web.View):
     def __send_invite(self, email, code):
-        content = f'<a href="http://localhost:8080/invite/{code}">Please respond</a>'
+        reply_url = """<a href="http://localhost:8080/invite/{}">
+            Please respond</a>""".format(code)
+        content = reply_url
         port = os.getenv('SMTP_PORT', 0)
         host = os.getenv('SMTP_HOST', 'smtp')
         with smtplib.SMTP(host, port=port) as smtp:
@@ -32,10 +34,15 @@ class InviteView(web.View):
             async with conn.cursor() as cur:
                 body = await self.request.json()
                 sql = dedent("""
-                    INSERT INTO invites (email, event, reply)
-                    VALUES ('{}', '{}', 'false') RETURNING id
-                """.format(body['email'], int(body['event'])))
+                    INSERT INTO invites (team, event, member, reply)
+                    VALUES ('{}', '{}', '{}', 'false') RETURNING id
+                """.format(body['team'], body['event'], body['member']))
                 await cur.execute(sql)
                 result = await cur.fetchone()
-                self.__send_invite(body['email'], result[0])
+
+                await cur.execute(
+                    'SELECT email from members where id = {}'.format(
+                        body['member']))
+                email = await cur.fetchone()
+                self.__send_invite(email[0], result[0])
                 return web.json_response({'id': result[0]})

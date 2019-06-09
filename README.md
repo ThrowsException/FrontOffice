@@ -28,7 +28,39 @@ boostrap docker containers, environment variables and start the app
 python server/please_rsvp/app.py
 ```
 
-There is currently only two endpoints for the PoC `/invite` and `/invite/{id}`
+### POST /teams
+
+request
+
+```json
+{
+  "name": "Team Name"
+}
+```
+
+### POST /events
+
+request
+
+```json
+{
+  "name": "Event Name",
+  "team": "<team_id>"
+}
+```
+
+### POST /members
+
+request
+
+```json
+{
+  "name": "John Smith",
+  "email": "foo@localhost.com",
+  "phone": "2222222222",
+  "team": "<team_id>"
+}
+```
 
 ### POST /invite
 
@@ -36,15 +68,10 @@ request
 
 ```json
 {
-  "team": "Team Name",
-  "email": "foo@bar.com"
+  "team": "<team_id>",
+  "event": "<event_id>",
+  "member": "<member_id>"
 }
-```
-
-response
-
-```json
-{ "id": 1 }
 ```
 
 ### GET /invite/{id}

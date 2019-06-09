@@ -3,76 +3,68 @@ import ReactDOM from "react-dom";
 import wretch from "wretch";
 
 const Home = () => {
-  const [groups, setGroups] = useState([]);
+  const [teams, setTeams] = useState([]);
   const [events, setEvents] = useState([]);
-  const [invites, setInvites] = useState([]);
+  const [members, setMembers] = useState([]);
 
   const [form, setFormValues] = useState({
-    email: "",
-    group: "",
+    team: "",
     event: "",
-    group_id: 0,
+    name: "",
+    email: "",
+    phone: "",
+    team_id: 0,
     event_id: 0
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await wretch("/api/groups")
-        .get()
-        .json(json => {
-          setGroups(json);
-        })
-        .catch(error => console.log(error));
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await wretch("/api/events")
-        .get()
-        .json(json => {
-          setEvents(json);
-        })
-        .catch(error => console.log(error));
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await wretch("/api/invite")
-        .get()
-        .json(json => {
-          setInvites(json);
-        })
-        .catch(error => console.log(error));
-    };
-    fetchData();
-  }, []);
-
-  const createGroup = async () => {
-    await wretch("/api/groups")
-      .post({ name: form.group })
+  const fetchData = async (url, callback) => {
+    await wretch(url)
+      .get()
       .json(json => {
-        setGroups([...groups, json]);
-      });
+        callback(json);
+      })
+      .catch(error => console.log(error));
+  };
+
+  const postData = async (url, body) => {
+    return await wretch(url)
+      .post({ ...body })
+      .json();
+  };
+
+  useEffect(() => {
+    fetchData("/api/teams", setTeams);
+  }, []);
+
+  useEffect(() => {
+    fetchData("/api/events", setEvents);
+  }, []);
+
+  useEffect(() => {
+    fetchData("/api/members", setMembers);
+  }, []);
+
+  const createTeam = async () => {
+    const team = await postData("/api/teams", { name: form.team });
+    setTeams([...teams, team]);
   };
 
   const createEvent = async () => {
-    await wretch("/api/events")
-      .post({ name: form.event, group: form.group_id })
-      .json(json => {
-        setEvents([...events, json]);
-      });
+    const event = await postData("/api/events", {
+      name: form.event,
+      team: form.team_id
+    });
+    setEvents([...events, event]);
   };
 
-  const createInvite = async () => {
-    await wretch("/api/invite")
-      .post({ email: form.email, event: form.event_id })
-      .json(json => {
-        setInvites([...events, json]);
-      });
+  const createMember = async () => {
+    const member = await postData("/api/members", {
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+      team: form.team_id
+    });
+    setMembers([...members, member]);
   };
 
   const handleInputChange = event => {
@@ -83,18 +75,14 @@ const Home = () => {
 
   return (
     <>
-      {groups && (
+      {teams && (
         <div>
-          <b>No Groups! Make One</b>
+          <b>No Teams! Make One</b>
           <div>
             <label>Name:</label>
-            <input
-              name="group"
-              onChange={handleInputChange}
-              value={form.group}
-            />
+            <input name="team" onChange={handleInputChange} value={form.team} />
           </div>
-          <button onClick={createGroup}>Create Group</button>
+          <button onClick={createTeam}>Create Group</button>
         </div>
       )}
 
@@ -108,42 +96,50 @@ const Home = () => {
               onChange={handleInputChange}
               value={form.event}
             />
-            <label>Group:</label>
+            <label>Team:</label>
             <input
-              name="group_id"
+              name="team_id"
               onChange={handleInputChange}
-              value={form.group_id}
+              value={form.team_id}
             />
           </div>
           <button onClick={createEvent}>Create Event</button>
         </div>
       )}
 
-      {invites && (
+      {members && (
         <div>
-          <b>No Invites! Make One</b>
+          <b>No Members! Make One</b>
           <div>
+            <label>Name:</label>
+            <input name="name" onChange={handleInputChange} value={form.name} />
             <label>Email:</label>
             <input
               name="email"
               onChange={handleInputChange}
               value={form.email}
             />
-            <label>Event:</label>
+            <label>Phone:</label>
             <input
-              name="event_id"
+              name="phone"
               onChange={handleInputChange}
-              value={form.event_id}
+              value={form.phone}
             />
-            <button onClick={createInvite}>Create Invite</button>
+            <label>Team:</label>
+            <input
+              name="team_id"
+              onChange={handleInputChange}
+              value={form.team_id}
+            />
+            <button onClick={createMember}>Create Member</button>
           </div>
         </div>
       )}
 
       <div>Form: {JSON.stringify(form)}</div>
-      <div>Groups: {JSON.stringify(groups)}</div>
+      <div>Teams: {JSON.stringify(teams)}</div>
       <div>Events: {JSON.stringify(events)}</div>
-      <div>Invites: {JSON.stringify(invites)}</div>
+      <div>Members: {JSON.stringify(members)}</div>
     </>
   );
 };

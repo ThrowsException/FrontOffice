@@ -1,6 +1,6 @@
 from aiohttp import web
 
-from please_rsvp.views import events, groups, invites
+from please_rsvp.views import events, invites, members, teams
 
 
 async def status(request):
@@ -10,11 +10,14 @@ async def status(request):
 def setup_routes(app):
     app.router.add_get('/status', status)
 
-    app.router.add_view('/groups', groups.GroupView)
-    app.router.add_view('/groups/{id}', groups.GroupView)
+    app.router.add_view('/teams', teams.TeamView)
+    app.router.add_view('/teams/{id}', teams.TeamView)
 
     app.router.add_view('/events', events.EventView)
     app.router.add_view('/events/{id}', events.EventView)
 
-    app.router.add_view('/invite', invites.InviteView)
-    app.router.add_view('/invite/{id}', invites.InviteView)
+    app.router.add_view('/members', members.MemberView)
+    app.router.add_view('/members/{id}', members.MemberView)
+
+    app.router.add_view('/invites', invites.InviteView)
+    app.router.add_view('/invites/{id}', invites.InviteView)

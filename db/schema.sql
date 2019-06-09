@@ -1,17 +1,26 @@
-CREATE TABLE groups (
+CREATE TABLE teams (
   id bigserial PRIMARY KEY,
   name text NOT NULL
+);
+
+CREATE TABLE members (
+  id bigserial PRIMARY KEY,
+  name text NOT NULL,
+  email text,
+  phone text,
+  team bigint REFERENCES teams NOT NULL
 );
 
 CREATE TABLE events (
   id bigserial PRIMARY KEY,
   name text,
-  "group" bigint REFERENCES groups NOT NULL
+  team bigint REFERENCES teams NOT NULL
 );
 
 CREATE TABLE invites (
   id bigserial PRIMARY KEY,
-  email text,
   reply boolean,
-  event bigint REFERENCES events NOT NULL
+  event bigint REFERENCES events NOT NULL,
+  team bigint REFERENCES teams NOT NULL,
+  member bigint REFERENCES members NOT NULL
 );
