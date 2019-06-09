@@ -64,13 +64,13 @@ request
 
 ### POST /invite
 
+## Sends invites for that event to members of the group
+
 request
 
 ```json
 {
-  "team": "<team_id>",
-  "event": "<event_id>",
-  "member": "<member_id>"
+  "event": "<event_id>"
 }
 ```
 
