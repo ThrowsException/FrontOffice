@@ -25,13 +25,15 @@ class TeamView(web.View):
         async with self.request.app['db_pool'].acquire() as conn:
             async with conn.cursor() as cur:
                 body = await self.request.json()
-                sql = dedent("""
+                sql = dedent(
+                    """
                     INSERT INTO teams (name)
                     VALUES ('{}') RETURNING id
                 """.format(body['name']))
                 await cur.execute(sql)
                 result = await cur.fetchone()
-                return web.json_response({
-                    'id': result[0],
-                    'name': body['name']
-                })
+                return web.json_response(
+                    {
+                        'id': result[0],
+                        'name': body['name']
+                    })

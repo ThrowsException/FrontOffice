@@ -17,7 +17,13 @@ class MemberView(web.View):
                 await cur.execute(sql)
                 result = await cur.fetchall()
 
-                items = [{'id': x[0], 'name': x[1]} for x in result]
+                items = [
+                    {
+                        'id': x[0],
+                        'name': x[1],
+                        'email': x[2]
+                    } for x in result
+                ]
 
         return web.json_response(items)
 
@@ -25,14 +31,17 @@ class MemberView(web.View):
         async with self.request.app['db_pool'].acquire() as conn:
             async with conn.cursor() as cur:
                 body = await self.request.json()
-                sql = dedent("""
+                sql = dedent(
+                    """
                     INSERT INTO members (name, email, phone, team)
                     VALUES ('{}', '{}', '{}', '{}') RETURNING id
-                """.format(body['name'], body['email'], body['phone'],
-                           body['team']))
+                """.format(
+                        body['name'], body['email'], body['phone'],
+                        body['team']))
                 await cur.execute(sql)
                 result = await cur.fetchone()
-                return web.json_response({
-                    'id': result[0],
-                    'name': body['name']
-                })
+                return web.json_response(
+                    {
+                        'id': result[0],
+                        'name': body['name']
+                    })

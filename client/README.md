@@ -2,7 +2,7 @@
 
 ## Pre reqs
 
-Node >= 12.4  
+Node >= 12.4
 npm >= 6.9
 
 ## Running the server

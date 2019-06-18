@@ -23,3 +23,5 @@ CREATE TABLE invites (
   event bigint REFERENCES events NOT NULL,
   member bigint REFERENCES members NOT NULL
 );
+
+CREATE UNIQUE INDEX team_member ON members (email, team);

@@ -69,6 +69,7 @@ const Home = () => {
   };
 
   useEffect(() => {
+    console.log("Effect", teams);
     fetchData("/api/teams", setTeams);
   }, []);
 
@@ -108,12 +109,15 @@ const Home = () => {
     newObject[event.target.name] = event.target.value;
     setFormValues(Object.assign({}, form, newObject));
   };
-
   return (
     <>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          {teams && (
+          {teams.length > 0 ? (
+            <h1>
+              ID: {teams[0].id} Name: {teams[0].name}
+            </h1>
+          ) : (
             <Box>
               <h1>Create A Team</h1>
               <div>
@@ -133,48 +137,50 @@ const Home = () => {
         </Grid>
 
         <Grid item xs={12}>
-          {members && (
+          <div>
+            <h1>Add Member</h1>
             <div>
-              <h1>Add Member</h1>
-              <div>
-                <TextField
-                  label="Name"
-                  name="name"
-                  onChange={handleInputChange}
-                  value={form.name}
-                  className={classes.textField}
-                />
-                <TextField
-                  label="Email"
-                  name="email"
-                  onChange={handleInputChange}
-                  value={form.email}
-                  className={classes.textField}
-                />
-                <TextField
-                  label="Phone"
-                  name="phone"
-                  onChange={handleInputChange}
-                  value={form.phone}
-                  className={classes.textField}
-                />
-                <TextField
-                  label="Team Id"
-                  name="team_id"
-                  onChange={handleInputChange}
-                  value={form.team_id}
-                  className={classes.textField}
-                />
-              </div>
-              <FormButton variant="contained" onClick={createMember}>
-                Create Member
-              </FormButton>
+              <TextField
+                label="Name"
+                name="name"
+                onChange={handleInputChange}
+                value={form.name}
+                className={classes.textField}
+              />
+              <TextField
+                label="Email"
+                name="email"
+                onChange={handleInputChange}
+                value={form.email}
+                className={classes.textField}
+              />
+              <TextField
+                label="Phone"
+                name="phone"
+                onChange={handleInputChange}
+                value={form.phone}
+                className={classes.textField}
+              />
+              <TextField
+                label="Team Id"
+                name="team_id"
+                onChange={handleInputChange}
+                value={form.team_id}
+                className={classes.textField}
+              />
             </div>
-          )}
+            <FormButton variant="contained" onClick={createMember}>
+              Create Member
+            </FormButton>
+          </div>
         </Grid>
 
         <Grid item xs={12}>
-          {events && (
+          {events.length > 0 ? (
+            <h1>
+              ID: {events[0].id} Name: {events[0].name}
+            </h1>
+          ) : (
             <Box>
               <h1>Create an Event</h1>
               <div>
@@ -199,12 +205,14 @@ const Home = () => {
             </Box>
           )}
         </Grid>
-
-        <Grid item>
-          <div>Form: {JSON.stringify(form)}</div>
-          <div>Teams: {JSON.stringify(teams)}</div>
-          <div>Events: {JSON.stringify(events)}</div>
-          <div>Members: {JSON.stringify(members)}</div>
+        <Grid item xs={12}>
+          <ul>
+            {members.map(member => (
+              <li key={member.id}>
+                {member.name} {member.email}
+              </li>
+            ))}
+          </ul>
         </Grid>
       </Grid>
     </>
