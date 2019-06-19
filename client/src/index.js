@@ -2,54 +2,22 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import wretch from "wretch";
 
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
+import CreateTeamComponent from "./components/CreateTeamComponent";
+import CreateMemberComponent from "./components/CreateMemberComponent";
+import TeamListComponent from "./components/TeamListComponent";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 
 import "typeface-roboto";
 
-const FormButton = withStyles({
-  root: {
-    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 75%)",
-    borderRadius: 3,
-    border: 0,
-    color: "white",
-    height: 48,
-    padding: "0 30px",
-    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)"
-  },
-  label: {
-    textTransform: "capitalize"
-  }
-})(Button);
-
-const useStyles = makeStyles(theme => ({
-  container: {
-    display: "flex",
-    flexWrap: "wrap"
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 200
-  }
-}));
-
 const Home = () => {
-  const classes = useStyles();
   const [teams, setTeams] = useState([]);
   const [events, setEvents] = useState([]);
   const [members, setMembers] = useState([]);
 
   const [form, setFormValues] = useState({
-    team: "",
     event: "",
-    name: "",
-    email: "",
-    phone: "",
-    team_id: "",
     event_id: ""
   });
 
@@ -69,7 +37,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    console.log("Effect", teams);
+    console.log("what");
     fetchData("/api/teams", setTeams);
   }, []);
 
@@ -81,8 +49,8 @@ const Home = () => {
     fetchData("/api/members", setMembers);
   }, []);
 
-  const createTeam = async () => {
-    const team = await postData("/api/teams", { name: form.team });
+  const createTeam = async name => {
+    const team = await postData("/api/teams", { name });
     setTeams([...teams, team]);
   };
 
@@ -94,85 +62,33 @@ const Home = () => {
     setEvents([...events, event]);
   };
 
-  const createMember = async () => {
+  const createMember = async ({ name, email, phone, team }) => {
     const member = await postData("/api/members", {
-      name: form.name,
-      email: form.email,
-      phone: form.phone,
-      team: form.team_id
+      name,
+      email,
+      phone,
+      team
     });
     setMembers([...members, member]);
   };
 
   const handleInputChange = event => {
-    let newObject = {};
-    newObject[event.target.name] = event.target.value;
-    setFormValues(Object.assign({}, form, newObject));
+    const { name, value } = event;
+    setFormValues({ ...form, [name]: value });
   };
+
   return (
     <>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          {teams.length > 0 ? (
-            <h1>
-              ID: {teams[0].id} Name: {teams[0].name}
-            </h1>
-          ) : (
-            <Box>
-              <h1>Create A Team</h1>
-              <div>
-                <TextField
-                  label="Team Name"
-                  name="team"
-                  onChange={handleInputChange}
-                  value={form.team}
-                  className={classes.textField}
-                />
-              </div>
-              <FormButton variant="contained" onClick={createTeam}>
-                Create Team
-              </FormButton>
-            </Box>
-          )}
+          <h1>Create A Team</h1>
+          <CreateTeamComponent submit={createTeam} />
+          <TeamListComponent items={teams} />
         </Grid>
 
         <Grid item xs={12}>
-          <div>
-            <h1>Add Member</h1>
-            <div>
-              <TextField
-                label="Name"
-                name="name"
-                onChange={handleInputChange}
-                value={form.name}
-                className={classes.textField}
-              />
-              <TextField
-                label="Email"
-                name="email"
-                onChange={handleInputChange}
-                value={form.email}
-                className={classes.textField}
-              />
-              <TextField
-                label="Phone"
-                name="phone"
-                onChange={handleInputChange}
-                value={form.phone}
-                className={classes.textField}
-              />
-              <TextField
-                label="Team Id"
-                name="team_id"
-                onChange={handleInputChange}
-                value={form.team_id}
-                className={classes.textField}
-              />
-            </div>
-            <FormButton variant="contained" onClick={createMember}>
-              Create Member
-            </FormButton>
-          </div>
+          <h1>Add Member</h1>
+          <CreateMemberComponent submit={createMember} />
         </Grid>
 
         <Grid item xs={12}>
@@ -181,7 +97,7 @@ const Home = () => {
               ID: {events[0].id} Name: {events[0].name}
             </h1>
           ) : (
-            <Box>
+            <>
               <h1>Create an Event</h1>
               <div>
                 <TextField
@@ -189,20 +105,18 @@ const Home = () => {
                   name="event"
                   onChange={handleInputChange}
                   value={form.event}
-                  className={classes.textField}
                 />
                 <TextField
                   label="Team Id"
                   name="team_id"
                   onChange={handleInputChange}
                   value={form.team_id}
-                  className={classes.textField}
                 />
               </div>
-              <FormButton variant="contained" onClick={createEvent}>
+              <Button variant="contained" onClick={createEvent}>
                 Create Event
-              </FormButton>
-            </Box>
+              </Button>
+            </>
           )}
         </Grid>
         <Grid item xs={12}>
