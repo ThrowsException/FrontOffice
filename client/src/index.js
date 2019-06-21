@@ -37,15 +37,8 @@ const Home = () => {
   };
 
   useEffect(() => {
-    console.log("what");
     fetchData("/api/teams", setTeams);
-  }, []);
-
-  useEffect(() => {
     fetchData("/api/events", setEvents);
-  }, []);
-
-  useEffect(() => {
     fetchData("/api/members", setMembers);
   }, []);
 
