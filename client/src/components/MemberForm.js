@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, TextField } from "@material-ui/core";
 
-const CreateMemberComponent = ({ submit }) => {
+const MemberForm = ({ submit }) => {
   const [member, setMemberValues] = useState({
     name: "",
     email: "",
@@ -53,4 +53,4 @@ const CreateMemberComponent = ({ submit }) => {
   );
 };
 
-export default CreateMemberComponent;
+export default MemberForm;
