@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button, TextField } from "@material-ui/core";
 
-const CreateTeamComponent = ({ submit }) => {
+const TeamForm = ({ submit }) => {
   const [name, setName] = useState("");
 
   const handleInputChange = e => {
@@ -26,4 +26,4 @@ const CreateTeamComponent = ({ submit }) => {
   );
 };
 
-export default CreateTeamComponent;
+export default TeamForm;

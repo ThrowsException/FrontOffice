@@ -15,6 +15,26 @@ def send_invite(email, code):
     with smtplib.SMTP(host, port=port) as smtp:
         smtp.sendmail('me@me.com', email, content)
 
+class TeamEvents(web.View):
+    async def get(self):
+        id = self.request.match_info.get('id')
+
+        sql = 'SELECT * FROM events WHERE team = {}'.format(id)
+       
+        items = []
+        async with self.request.app['db_pool'].acquire() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(sql)
+                result = await cur.fetchall()
+                items = [
+                    {
+                        'id': x[0],
+                        'name': x[1],
+                        'team': x[2]
+                    } for x in result
+                ]
+
+        return web.json_response(items)
 
 class EventView(web.View):
     async def get(self):
@@ -79,4 +99,4 @@ class EventView(web.View):
                 for record in needs_invite:
                     send_invite(**record)
 
-                return web.json_response({'id': result[0]})
+                return web.json_response({'id': result[0], 'name': body['name']})

@@ -12,6 +12,8 @@ def setup_routes(app):
 
     app.router.add_view('/teams', teams.TeamView)
     app.router.add_view('/teams/{id}', teams.TeamView)
+    app.router.add_view('/teams/{id}/events', events.TeamEvents)
+    app.router.add_view('/teams/{id}/members', members.TeamMembers)
 
     app.router.add_view('/events', events.EventView)
     app.router.add_view('/events/{id}', events.EventView)

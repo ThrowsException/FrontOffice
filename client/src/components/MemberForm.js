@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button, TextField } from "@material-ui/core";
 
 const MemberForm = ({ submit }) => {
   const [member, setMemberValues] = useState({
     name: "",
     email: "",
-    phone: "",
-    team: ""
+    phone: ""
   });
 
   const handleInputChange = e => {
@@ -34,12 +33,6 @@ const MemberForm = ({ submit }) => {
           name="phone"
           onChange={handleInputChange}
           value={member.phone}
-        />
-        <TextField
-          label="Team Id"
-          name="team"
-          onChange={handleInputChange}
-          value={member.team}
         />
       </div>
       <Button

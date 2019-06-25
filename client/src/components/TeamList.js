@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { List, ListItem, ListItemText, Typography } from "@material-ui/core";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
-const TeamListComponent = ({ items }) => {
+const TeamList = ({ items }) => {
   return (
     <List dense={true} disablePadding={true}>
       {items.map(({ id, name }) => (
         <ListItem key={id}>
           <ListItemText
-            primary={name}
+            primary={<Link to={`/teams/${id}`}>{name}</Link>}
             secondary={
               <>
                 <Typography
@@ -26,4 +27,4 @@ const TeamListComponent = ({ items }) => {
   );
 };
 
-export default TeamListComponent;
+export default TeamList;
