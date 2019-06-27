@@ -7,9 +7,10 @@ from aiohttp import web
 
 class InviteView(web.View):
     def __send_invite(self, email, code):
-        reply_url = """<a href="http://localhost:8080/invites/{}?r=no">
-            For No</a><a href="http://localhost:8080/invites/{}?r=yes">
-                For Yes</a>""".format(code)
+        print(email, code)
+        reply_url = """<a href="http://localhost:8080/invites/{code}?r=no">
+            For No</a><a href="http://localhost:8080/invites/{code}?r=yes">
+                For Yes</a>""".format(code=code)
         content = reply_url
         port = os.getenv('SMTP_PORT', 0)
         host = os.getenv('SMTP_HOST', 'smtp')
@@ -76,6 +77,7 @@ class InviteView(web.View):
                             'code': result[0]
                         })
 
+                print(needs_invite)
                 for record in needs_invite:
                     self.__send_invite(**record)
 

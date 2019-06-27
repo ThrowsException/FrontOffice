@@ -61,3 +61,12 @@ async def test_post_event(cli):
             'team': group['id']
         })
     assert resp.status == 200
+
+
+async def test_post_login_401(cli):
+    resp = await cli.post('/login', json={'username': 'test', 'password': 'password'})
+    assert resp.status == 401
+
+async def test_post_login(cli):
+    resp = await cli.post('/login', json={'username': 'admin', 'password': 'password'})
+    assert resp.status == 200

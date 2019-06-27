@@ -23,6 +23,12 @@ services:
     ports:
       - 8080
 
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - 6379
+
   smtp:
     image: mailhog/mailhog
     restart: always
@@ -36,5 +42,8 @@ services:
       dockerfile: ./server/Dockerfile
     ports:
       - "8080:8080"
+    depends_on:
+      - redis
+      - db
     environment:
       SMTP_PORT: 1025

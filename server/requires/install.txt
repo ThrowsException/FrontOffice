@@ -1,2 +1,6 @@
+aiohttp_security
+aiohttp_session
 aiohttp
 aiopg
+aioredis
+passlib
