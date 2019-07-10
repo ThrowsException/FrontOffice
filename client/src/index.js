@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import { TeamHome, TeamDetails } from "./components";
+import { TeamHome, TeamDetails, Login } from "./components";
 import { Drawer, List, ListItem } from "@material-ui/core";
 
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
@@ -15,6 +15,9 @@ function AppRouter() {
         <Drawer style={{ width: 240 }} variant="permanent">
           <List style={{ width: 240 }}>
             <ListItem>
+              <Link to="/">Sign In</Link>
+            </ListItem>
+            <ListItem>
               <Link to="/teams">Teams</Link>
             </ListItem>
           </List>
@@ -22,6 +25,7 @@ function AppRouter() {
 
         <main style={{ flexGrow: 1 }}>
           <Switch>
+            <Route path="/" exact component={Login} />
             <Route path="/" exact component={TeamHome} />
             <Route path="/teams" exact component={TeamHome} />
             <Route path="/teams/:id" component={TeamDetails} />

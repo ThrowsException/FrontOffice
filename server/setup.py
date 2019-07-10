@@ -10,7 +10,7 @@ def read_requires():
 
 setup(
     name='please_rsvp',
-    version='0.0.1',
+    version='0.0.2',
     description='My App',
     packages=find_packages(),
     include_package_data=True,
