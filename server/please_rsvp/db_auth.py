@@ -7,7 +7,7 @@ class DBAuthorizationPolicy(AbstractAuthorizationPolicy):
         self.db = db
 
     async def authorized_userid(self, identity):
-        sql = "SELECT * FROM users WHERE login = '{}' and disabled = false".format(
+        sql = "SELECT * FROM users WHERE id = '{}' and disabled = false".format(
             identity
         )
         async with self.db.acquire() as conn:
@@ -25,7 +25,7 @@ class DBAuthorizationPolicy(AbstractAuthorizationPolicy):
 
         async with self.db.acquire() as conn:
             async with conn.cursor() as cur:
-                sql = "SELECT * FROM users WHERE login = '{}' and disabled = false".format(
+                sql = "SELECT * FROM users WHERE id = '{}' and disabled = false".format(
                     identity
                 )
                 await cur.execute(sql)
@@ -36,7 +36,7 @@ class DBAuthorizationPolicy(AbstractAuthorizationPolicy):
                     if is_superuser:
                         return True
 
-                    sql = "SELECT * FROM premissions WHERE user_id = '{}'".format(
+                    sql = "SELECT * FROM permissions WHERE user_id = '{}'".format(
                         user_id
                     )
                     await cur.execute(sql)
@@ -51,7 +51,6 @@ class DBAuthorizationPolicy(AbstractAuthorizationPolicy):
 async def check_credentials(db, username, password):
     async with db.acquire() as conn:
         async with conn.cursor() as cur:
-            print(username, password)
             sql = "SELECT * FROM users WHERE login = '{}' and disabled = false".format(
                 username
             )
@@ -59,6 +58,16 @@ async def check_credentials(db, username, password):
             user = await cur.fetchone()
             if user is not None:
                 hash = user[2]
-                print(hash)
                 return sha256_crypt.verify(password, hash)
     return False
+
+
+async def get_user(db, login):
+    async with db.acquire() as conn:
+        async with conn.cursor() as cur:
+            sql = "SELECT * FROM users WHERE login = '{}' and disabled = false".format(
+                login
+            )
+            await cur.execute(sql)
+            user = await cur.fetchone()
+            return user

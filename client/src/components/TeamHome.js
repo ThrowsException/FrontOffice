@@ -31,8 +31,8 @@ const TeamHome = () => {
 
   return (
     <>
+      {teams.length === 0 ? <div>No Teams</div> : <TeamList items={teams} />}
       <TeamForm submit={createTeam} />
-      <TeamList items={teams} />
     </>
   );
 };

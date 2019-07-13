@@ -24,4 +24,9 @@ CREATE TABLE invites (
   member bigint REFERENCES members NOT NULL
 );
 
+CREATE TABLE owners (
+  team bigint REFERENCES teams NOT NULL,
+  owner integer NOT NULL
+);
+
 CREATE UNIQUE INDEX team_member ON members (email, team);

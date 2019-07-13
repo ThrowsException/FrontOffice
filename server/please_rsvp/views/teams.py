@@ -1,17 +1,25 @@
 from textwrap import dedent
 
 from aiohttp import web
-from aiohttp_security import check_authorized
+from aiohttp_security import check_authorized, authorized_userid
 
 
 class TeamView(web.View):
     async def get(self):
         await check_authorized(self.request)
+        user_id = await authorized_userid(self.request)
         team_id = self.request.match_info.get("id")
 
-        sql = "SELECT * FROM teams"
+        sql = """
+            SELECT t.* 
+             FROM teams t 
+             JOIN owners o ON t.id = o.team
+             WHERE o.owner = {}
+        """.format(
+            user_id
+        )
         if team_id:
-            sql = "{} WHERE id = {}".format(sql, team_id)
+            sql = "{} AND t.id = {}".format(sql, team_id)
 
         items = []
         async with self.request.app["db_pool"].acquire() as conn:
@@ -25,6 +33,7 @@ class TeamView(web.View):
 
     async def post(self):
         await check_authorized(self.request)
+        user_id = await authorized_userid(self.request)
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
                 body = await self.request.json()
@@ -38,4 +47,14 @@ class TeamView(web.View):
                 )
                 await cur.execute(sql)
                 result = await cur.fetchone()
+
+                sql = dedent(
+                    """
+                    INSERT INTO owners
+                    VALUES ('{}', '{}')
+                """.format(
+                        result[0], user_id
+                    )
+                )
+                await cur.execute(sql)
                 return web.json_response({"id": result[0], "name": body["name"]})

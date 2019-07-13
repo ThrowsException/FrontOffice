@@ -1,6 +1,23 @@
 import React, { useState } from "react";
 import wretch from "wretch";
-import { Button, TextField } from "@material-ui/core";
+import {
+  Button,
+  TextField,
+  AppBar,
+  Typography,
+  Toolbar
+} from "@material-ui/core";
+import styled from "styled-components";
+
+const SignupForm = styled.div`
+  max-width: 320px;
+`;
+
+const Root = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 const Login = () => {
   const [user, setValues] = useState({
@@ -24,21 +41,50 @@ const Login = () => {
 
   return (
     <>
-      <TextField
-        label="Username"
-        name="email"
-        onChange={handleInputChange}
-        value={user.email}
-      />
-      <TextField
-        label="Password"
-        name="password"
-        type="password"
-        autoComplete="current-password"
-        onChange={handleInputChange}
-        value={user.password}
-      />
-      <Button onClick={() => submit()}>Submit</Button>
+      <AppBar position="static" color="default" elevation={0}>
+        <Toolbar>
+          <Typography variant="h6" color="inherit" noWrap>
+            Company name
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Root>
+        <SignupForm>
+          <h1>Sign In</h1>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Email"
+            name="email"
+            onChange={handleInputChange}
+            value={user.email}
+            autoComplete="email"
+            autoFocus
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Password"
+            name="password"
+            type="password"
+            autoComplete="current-password"
+            onChange={handleInputChange}
+            value={user.password}
+          />
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            onClick={submit}
+          >
+            Submit
+          </Button>
+        </SignupForm>
+      </Root>
     </>
   );
 };

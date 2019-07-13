@@ -7,7 +7,7 @@ from aiohttp_security import (
     check_authorized,
 )
 
-from please_rsvp.db_auth import check_credentials
+from please_rsvp.db_auth import check_credentials, get_user
 from please_rsvp.views import events, invites, members, teams
 
 
@@ -21,7 +21,12 @@ async def login(request):
     login = body.get("username")
     password = body.get("password")
     if await check_credentials(request.app["db_pool"], login, password):
-        await remember(request, response, login)
+        user = await get_user(request.app["db_pool"], login)
+        print(user)
+        id = str(user[0])
+        print(id)
+        await remember(request, response, id)
+        print("GOT")
         raise response
 
     raise web.HTTPUnauthorized(body=b"Invalid username/password combination")
