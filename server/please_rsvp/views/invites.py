@@ -87,7 +87,6 @@ class InviteView(web.View):
 
                     needs_invite.append({"email": record[2], "code": result[0]})
 
-                print(needs_invite)
                 for record in needs_invite:
                     self.__send_invite(**record)
 

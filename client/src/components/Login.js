@@ -19,7 +19,7 @@ const Root = styled.div`
   justify-content: center;
 `;
 
-const Login = () => {
+const Login = ({ history }) => {
   const [user, setValues] = useState({
     email: "",
     password: ""
@@ -33,8 +33,8 @@ const Login = () => {
   const submit = async () => {
     await wretch("/api/login")
       .post({ username: user.email, password: user.password })
-      .json(json => {
-        callback(json);
+      .json(() => {
+        history.push("/teams");
       })
       .catch(error => console.log(error));
   };

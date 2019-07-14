@@ -16,18 +16,15 @@ async def status(request):
 
 
 async def login(request):
-    response = web.HTTPFound("/teams")
+    response = web.json_response({"status": "success"})
     body = await request.json()
     login = body.get("username")
     password = body.get("password")
     if await check_credentials(request.app["db_pool"], login, password):
         user = await get_user(request.app["db_pool"], login)
-        print(user)
         id = str(user[0])
-        print(id)
         await remember(request, response, id)
-        print("GOT")
-        raise response
+        return response
 
     raise web.HTTPUnauthorized(body=b"Invalid username/password combination")
 

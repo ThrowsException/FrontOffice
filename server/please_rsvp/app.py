@@ -23,12 +23,10 @@ async def create_aiopg(app: web.Application):
     PASSWORD = os.getenv("POSTGRES_PASSWORD", "example")
     db = None
     try:
-        print("connecting....")
         db = await aiopg.create_pool(
             user="postgres", password=PASSWORD, host=HOST, port=PORT, timeout=5
         )
     except psycopg2.Error as e:
-        print(e)
         logger.error(e)
     app["db_pool"] = db
     setup_security(app, SessionIdentityPolicy(), DBAuthorizationPolicy(db))
@@ -40,10 +38,8 @@ async def create_session(app: web.Application):
     try:
         redis_pool = await create_redis_pool((HOST, PORT), timeout=5)
         setup_session(app, RedisStorage(redis_pool))
-    except RedisError as e:
-        print(e)
-    except TimeoutError as e:
-        print(e)
+    except (RedisError, TimeoutError) as e:
+        logger.error(e)
 
 
 def make_app() -> web.Application:

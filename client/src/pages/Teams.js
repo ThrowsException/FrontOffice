@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import wretch from "wretch";
-import { TeamForm, TeamList } from "./";
+import { TeamForm, TeamList } from "../components";
 
-const TeamHome = () => {
+const Teams = () => {
   const [teams, setTeams] = useState([]);
 
   const postData = async (url, body) => {
@@ -31,10 +31,10 @@ const TeamHome = () => {
 
   return (
     <>
-      {teams.length === 0 ? <div>No Teams</div> : <TeamList items={teams} />}
+      <TeamList items={teams} />
       <TeamForm submit={createTeam} />
     </>
   );
 };
 
-export default TeamHome;
+export default Teams;

@@ -1,3 +1,4 @@
 -r install.txt
 -r testing.txt
+aiohttp-devtools
 black
