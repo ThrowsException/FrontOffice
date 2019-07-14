@@ -3,20 +3,52 @@ import smtplib
 from textwrap import dedent
 
 from aiohttp_security import check_authorized
+import aiohttp
 from aiohttp import web
 
 
-def send_invite(email, code):
-    reply_url = """<a href="http://localhost:8080/invites/{0}?r=no">
-        For No</a><a href="http://localhost:8080/invites/{0}?r=yes">
-            For Yes</a>""".format(
-        code
-    )
-    content = reply_url
-    port = os.getenv("SMTP_PORT", 0)
-    host = os.getenv("SMTP_HOST", "smtp")
-    with smtplib.SMTP(host, port=port) as smtp:
-        smtp.sendmail("me@me.com", email, content)
+async def send_invite(invites):
+    reply_url = """<a href="http://localhost:8080/invites/{code}?r=no">
+            For No</a><a href="http://localhost:8080/invites/{code}?r=yes">
+                For Yes</a>"""
+
+    if os.getenv("EMAIL_API_KEY", None):
+
+        personalizations = []
+        for invite in invites:
+            personalizations.append(
+                {
+                    "to": [{"email": invite["email"]}],
+                    "substitutions": {"{code}": str(invite["code"])},
+                }
+            )
+        mail = {
+            "personalizations": personalizations,
+            "from": {"email": "me@oneillc.io"},
+            "content": [{"type": "text/html", "value": reply_url}],
+            "subject": "Game Reminder",
+        }
+
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                "https://api.sendgrid.com/v3/mail/send",
+                headers={
+                    "Authorization": "Bearer {}".format(os.getenv("EMAIL_API_KEY")),
+                    "Content-Type": "application/json",
+                },
+                json=mail,
+            ) as resp:
+                print(resp)
+                data = await resp.text()
+                print(data)
+
+    else:
+        for invite in invites:
+            content = reply_url.format({"code": invite["code"]})
+            port = os.getenv("SMTP_PORT", 0)
+            host = os.getenv("SMTP_HOST", "smtp")
+            with smtplib.SMTP(host, port=port) as smtp:
+                smtp.sendmail("me@me.com", invite["email"], content)
 
 
 class TeamEvents(web.View):
@@ -96,7 +128,6 @@ class EventView(web.View):
 
                     needs_invite.append({"email": member[1], "code": invite[0]})
 
-                for record in needs_invite:
-                    send_invite(**record)
+                await send_invite(needs_invite)
 
                 return web.json_response({"id": result[0], "name": body["name"]})
