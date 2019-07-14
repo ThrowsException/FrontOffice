@@ -12,6 +12,7 @@ function AppRouter() {
       <div style={{ display: "flex" }}>
         <main style={{ flexGrow: 1 }}>
           <Switch>
+            <Route path="" exact component={Login} />
             <Route path="/" exact component={Login} />
             <Route path="/teams" exact component={Teams} />
             <Route path="/teams/:id" component={TeamDetails} />
