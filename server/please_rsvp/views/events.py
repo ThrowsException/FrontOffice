@@ -38,9 +38,7 @@ async def send_invite(invites):
                 },
                 json=mail,
             ) as resp:
-                print(resp)
-                data = await resp.text()
-                print(data)
+                return resp.status
 
     else:
         for invite in invites:
@@ -49,6 +47,8 @@ async def send_invite(invites):
             host = os.getenv("SMTP_HOST", "smtp")
             with smtplib.SMTP(host, port=port) as smtp:
                 smtp.sendmail("me@me.com", invite["email"], content)
+
+        return 200
 
 
 class TeamEvents(web.View):
@@ -128,6 +128,6 @@ class EventView(web.View):
 
                     needs_invite.append({"email": member[1], "code": invite[0]})
 
-                await send_invite(needs_invite)
+                resp = await send_invite(needs_invite)
 
-                return web.json_response({"id": result[0], "name": body["name"]})
+                return web.json_response(status=resp.status)
