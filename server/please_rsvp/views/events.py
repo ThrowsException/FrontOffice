@@ -128,6 +128,6 @@ class EventView(web.View):
 
                     needs_invite.append({"email": member[1], "code": invite[0]})
 
-                resp = await send_invite(needs_invite)
+                resp_status = await send_invite(needs_invite)
 
-                return web.json_response(status=resp.status)
+                return web.json_response(status=resp_status)
