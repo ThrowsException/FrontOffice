@@ -102,34 +102,34 @@ class EventView(web.View):
                 await cur.execute(sql)
                 result = await cur.fetchone()
 
-                sql = dedent(
-                    """
-                    SELECT id, email
-                    FROM members
-                    WHERE team = '{}'
-                """.format(
-                        body["team"]
-                    )
-                )
-                await cur.execute(sql)
-                members = await cur.fetchall()
+                # sql = dedent(
+                #     """
+                #     SELECT id, email
+                #     FROM members
+                #     WHERE team = '{}'
+                # """.format(
+                #         body["team"]
+                #     )
+                # )
+                # await cur.execute(sql)
+                # members = await cur.fetchall()
 
-                for member in members:
-                    sql = dedent(
-                        """
-                        INSERT INTO invites (event, member, reply)
-                        VALUES ('{}', '{}', 'false') RETURNING id
-                    """.format(
-                            result[0], member[0]
-                        )
-                    )
-                    await cur.execute(sql)
-                    invite = await cur.fetchone()
+                # for member in members:
+                #     sql = dedent(
+                #         """
+                #         INSERT INTO invites (event, member, reply)
+                #         VALUES ('{}', '{}', 'false') RETURNING id
+                #     """.format(
+                #             result[0], member[0]
+                #         )
+                #     )
+                #     await cur.execute(sql)
+                #     invite = await cur.fetchone()
 
-                    needs_invite.append({"email": member[1], "code": invite[0]})
+                #     needs_invite.append({"email": member[1], "code": invite[0]})
 
-                resp_status = await send_invite(needs_invite)
-
+                # resp_status = await send_invite(needs_invite)
+                resp_status = 200
                 return web.json_response(
                     {"id": result[0], "name": body["name"]}, status=resp_status
                 )
