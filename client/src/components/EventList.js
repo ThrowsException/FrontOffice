@@ -2,10 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import styled from "styled-components";
-import List from "@material-ui/core/List";
 
 const list = {
-  show: {
+  visible: {
     opacity: 1,
     transition: {
       when: "beforeChildren",
@@ -18,7 +17,7 @@ const list = {
 };
 
 const items = {
-  show: { opacity: 1, x: 0 },
+  visible: { opacity: 1, x: 0 },
   hidden: { opacity: 0, x: -100 }
 };
 
@@ -40,10 +39,15 @@ const EventList = ({ events }) => {
   return (
     <>
       {events.length > 0 ? (
-        <Events animate="show" initial="hidden" variants={list}>
+        <Events animate="visible" initial="hidden" variants={list}>
           {events.map((events, i) => (
-            <Event key={events.id} variants={items}>
-              <EventTitle>{events.name}</EventTitle> {events.email}
+            <Event
+              variants={items}
+              key={events.id}
+              animate="visible"
+              initial="hidden"
+            >
+              <EventTitle>{events.name}</EventTitle>
             </Event>
           ))}
         </Events>

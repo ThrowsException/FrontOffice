@@ -130,4 +130,6 @@ class EventView(web.View):
 
                 resp_status = await send_invite(needs_invite)
 
-                return web.json_response(status=resp_status)
+                return web.json_response(
+                    {"id": result[0], "name": body["name"]}, status=resp_status
+                )

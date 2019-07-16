@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { MemoryRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { TeamDetails, Login } from "./components";
 import Teams from "./pages/Teams";
 
