@@ -54,7 +54,6 @@ const Login = ({ history }) => {
           <TextField
             variant="outlined"
             margin="normal"
-            required
             fullWidth
             label="Email"
             name="email"
@@ -66,7 +65,6 @@ const Login = ({ history }) => {
           <TextField
             variant="outlined"
             margin="normal"
-            required
             fullWidth
             label="Password"
             name="password"
