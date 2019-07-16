@@ -72,22 +72,22 @@ class InviteView(web.View):
                 await cur.execute(sql)
                 results = await cur.fetchall()
 
-                needs_invite = []
-                for record in results:
-                    sql = dedent(
-                        """
-                        INSERT INTO invites (event, member, reply)
-                        VALUES ('{}', '{}', 'false') RETURNING id
-                    """.format(
-                            record[0], record[1]
-                        )
-                    )
-                    await cur.execute(sql)
-                    result = await cur.fetchone()
+                # needs_invite = []
+                # for record in results:
+                #     sql = dedent(
+                #         """
+                #         INSERT INTO invites (event, member, reply)
+                #         VALUES ('{}', '{}', 'false') RETURNING id
+                #     """.format(
+                #             record[0], record[1]
+                #         )
+                #     )
+                #     await cur.execute(sql)
+                #     result = await cur.fetchone()
 
-                    needs_invite.append({"email": record[2], "code": result[0]})
+                #     needs_invite.append({"email": record[2], "code": result[0]})
 
-                for record in needs_invite:
-                    self.__send_invite(**record)
+                # for record in needs_invite:
+                #     self.__send_invite(**record)
 
         return web.json_response({"status": "Invites sent"})
