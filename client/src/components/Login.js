@@ -9,8 +9,9 @@ import {
 } from "@material-ui/core";
 import styled from "styled-components";
 
-const SignupForm = styled.div`
-  max-width: 320px;
+const SignupForm = styled.form`
+  min-width: 320px;
+  max-width: 600px;
 `;
 
 const Root = styled.div`
@@ -30,7 +31,8 @@ const Login = ({ history }) => {
     setValues({ ...user, [name]: value });
   };
 
-  const submit = async () => {
+  const submit = async e => {
+    e.preventDefault();
     await wretch("/api/login")
       .post({ username: user.email, password: user.password })
       .json(() => {
@@ -49,8 +51,7 @@ const Login = ({ history }) => {
         </Toolbar>
       </AppBar>
       <Root>
-        <SignupForm>
-          <h1>Sign In</h1>
+        <SignupForm onSubmit={submit}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -74,6 +75,7 @@ const Login = ({ history }) => {
             value={user.password}
           />
           <Button
+            type="submit"
             fullWidth
             variant="contained"
             color="primary"
