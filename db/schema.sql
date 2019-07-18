@@ -14,6 +14,7 @@ CREATE TABLE members (
 CREATE TABLE events (
   id bigserial PRIMARY KEY,
   name text,
+  date timestamp NOT NULL DEFAULT NOW(),
   team bigint REFERENCES teams NOT NULL
 );
 

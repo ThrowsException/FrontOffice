@@ -40,14 +40,15 @@ const EventList = ({ events }) => {
     <>
       {events.length > 0 ? (
         <Events animate="visible" initial="hidden" variants={list}>
-          {events.map((events, i) => (
+          {events.map((event, i) => (
             <Event
               variants={items}
-              key={events.id}
+              key={event.id}
               animate="visible"
               initial="hidden"
             >
-              <EventTitle>{events.name}</EventTitle>
+              <EventTitle>{event.name}</EventTitle>
+              {event.date}
             </Event>
           ))}
         </Events>

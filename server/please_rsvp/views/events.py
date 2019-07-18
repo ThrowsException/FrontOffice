@@ -2,9 +2,15 @@ import os
 import smtplib
 from textwrap import dedent
 
+import arrow
 from aiohttp_security import check_authorized
 import aiohttp
 from aiohttp import web
+
+
+def myconverter(o):
+    if isinstance(o, datetime.datetime):
+        return o.__str__()
 
 
 async def send_invite(invites):
@@ -63,7 +69,16 @@ class TeamEvents(web.View):
             async with conn.cursor() as cur:
                 await cur.execute(sql)
                 result = await cur.fetchall()
-                items = [{"id": x[0], "name": x[1], "team": x[2]} for x in result]
+                print(result)
+                items = [
+                    {
+                        "id": x[0],
+                        "name": x[1],
+                        "date": arrow.Arrow.fromdatetime(x[2]).format(),
+                        "team": x[3],
+                    }
+                    for x in result
+                ]
 
         return web.json_response(items)
 
@@ -81,8 +96,10 @@ class EventView(web.View):
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
                 await cur.execute(sql)
-                result = await cur.fetchall()
-                items = [{"id": x[0], "name": x[1], "team": x[2]} for x in result]
+                items = [
+                    {"id": x[0], "name": x[1], "date": x[2], "team": x[3]}
+                    for x in result
+                ]
 
         return web.json_response(items)
 
@@ -90,13 +107,15 @@ class EventView(web.View):
         needs_invite = []
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
+
                 body = await self.request.json()
+                print(body["date"])
                 sql = dedent(
                     """
-                    INSERT INTO events (name, team)
-                    VALUES ('{}', '{}') RETURNING id
+                    INSERT INTO events (name, date, team)
+                    VALUES ('{}', '{}', '{}') RETURNING id
                 """.format(
-                        body["name"], body["team"]
+                        body["name"], body["date"], body["team"]
                     )
                 )
                 await cur.execute(sql)
@@ -131,5 +150,6 @@ class EventView(web.View):
                 # resp_status = await send_invite(needs_invite)
                 resp_status = 200
                 return web.json_response(
-                    {"id": result[0], "name": body["name"]}, status=resp_status
+                    {"id": result[0], "name": body["name"], "date": body["date"]},
+                    status=resp_status,
                 )

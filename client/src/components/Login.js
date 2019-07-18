@@ -46,7 +46,7 @@ const Login = ({ history }) => {
       <AppBar position="static" color="default" elevation={0}>
         <Toolbar>
           <Typography variant="h6" color="inherit" noWrap>
-            Company name
+            Front Office
           </Typography>
         </Toolbar>
       </AppBar>

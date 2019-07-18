@@ -29,9 +29,11 @@ const TeamDetails = ({ match }) => {
       .catch(error => console.log(error));
   };
 
-  const createEvent = async ({ name }) => {
+  const createEvent = async (name, date) => {
+    console.log(date);
     const event = await postData("/api/events", {
       name,
+      date,
       team: match.params.id
     });
     setEvents([...events, event]);
