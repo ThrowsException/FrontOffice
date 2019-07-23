@@ -1,3 +1,6 @@
+import datetime
+from functools import partial
+import json
 import os
 import smtplib
 from textwrap import dedent
@@ -14,9 +17,10 @@ def myconverter(o):
 
 
 async def send_invite(invites):
-    reply_url = """<a href="http://localhost:8080/invites/{code}?r=no">
-            For No</a><a href="http://localhost:8080/invites/{code}?r=yes">
-                For Yes</a>"""
+    reply_url = """
+    <a href="http://localhost:8080/invites/{code}?r=no">For No</a>
+    <a href="http://localhost:8080/invites/{code}?r=yes"> For Yes</a>
+    """
 
     if os.getenv("EMAIL_API_KEY", None):
 
@@ -88,20 +92,51 @@ class EventView(web.View):
         await check_authorized(self.request)
         event_id = self.request.match_info.get("id")
 
-        sql = "SELECT * FROM events"
+        sql = """SELECT e.id, e.name, e.date, e.team
+        FROM events e
+        """
         if event_id:
-            sql = "{} WHERE id = {}".format(sql, event_id)
+            sql = "{} where e.id = {}".format(sql, event_id)
 
-        items = []
+        members_sql = """
+        SELECT m.id, m.name, m.email, i.id, i.reply from members m 
+        LEFT JOIN invites i 
+        ON m.id = i.member 
+        where team = {}
+        """
+
+        event = {}
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
                 await cur.execute(sql)
-                items = [
-                    {"id": x[0], "name": x[1], "date": x[2], "team": x[3]}
-                    for x in result
-                ]
+                result = await cur.fetchone()
+                if result:
+                    event = {
+                        "id": result[0],
+                        "name": result[1],
+                        "date": arrow.Arrow.fromdatetime(result[2]).format(),
+                        "team": result[3],
+                        "members": [],
+                    }
 
-        return web.json_response(items)
+                    await cur.execute(members_sql.format(result[3]))
+                    result = await cur.fetchall()
+                    if result:
+                        event["members"] = [
+                            {
+                                "id": x[0],
+                                "name": x[1],
+                                "email": x[2],
+                                "invite_id": x[3],
+                                "reply": x[4],
+                            }
+                            for x in result
+                        ]
+
+                # players = [{"player": x[4]} for x in result]
+                # event["players"] = players
+
+        return web.json_response(event, dumps=partial(json.dumps, default=myconverter))
 
     async def post(self):
         needs_invite = []

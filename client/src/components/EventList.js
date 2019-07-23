@@ -2,6 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import styled from "styled-components";
+import { format } from "date-fns";
+import { Button } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const list = {
   visible: {
@@ -22,17 +25,25 @@ const items = {
 };
 
 const Events = styled(motion.div)`
-  width: 400px;
-  list-style: none;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
 `;
 
 const Event = styled(motion.div)`
-  max-width: 100px;
+  max-width: 960px;
 `;
 
 const EventTitle = styled.h2`
   font-weight: 300;
   text-transform: capitalize;
+  flex: 0.3;
+`;
+
+const EventDetails = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
 `;
 
 const EventList = ({ events }) => {
@@ -47,8 +58,16 @@ const EventList = ({ events }) => {
               animate="visible"
               initial="hidden"
             >
-              <EventTitle>{event.name}</EventTitle>
-              {event.date}
+              <EventDetails>
+                <EventTitle>
+                  <Link to={`/teams/${event.team}/events/${event.id}`}>
+                    {event.name}
+                  </Link>
+                </EventTitle>
+                <EventTitle>{format(new Date(event.date), "P p")}</EventTitle>
+                <Button>Edit</Button>
+                <Button color="secondary">Delete</Button>
+              </EventDetails>
             </Event>
           ))}
         </Events>
