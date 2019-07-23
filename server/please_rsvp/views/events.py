@@ -66,7 +66,7 @@ class TeamEvents(web.View):
         await check_authorized(self.request)
         id = self.request.match_info.get("id")
 
-        sql = "SELECT * FROM events WHERE team = {}".format(id)
+        sql = "SELECT id, name, date, team FROM events WHERE team = {}".format(id)
 
         items = []
         async with self.request.app["db_pool"].acquire() as conn:
