@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import wretch from "wretch";
-import { PlayerList, EventList, MemberForm, EventForm } from "./";
+import { PlayerList, EventList, PlayerForm, EventForm } from "./";
 
 const TeamDetails = ({ match }) => {
   const [team, setTeam] = useState([{ name: "Loading..." }]);
@@ -57,7 +57,7 @@ const TeamDetails = ({ match }) => {
       <EventForm submit={createEvent} />
       <h1>Players</h1>
       <PlayerList members={members} />
-      <MemberForm submit={createMember} />
+      <PlayerForm submit={createMember} />
     </>
   );
 };

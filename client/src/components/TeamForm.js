@@ -19,7 +19,15 @@ const TeamForm = ({ submit }) => {
           value={name}
         />
       </div>
-      <Button variant="contained" color="primary" onClick={() => submit(name)}>
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        onClick={() => {
+          submit(name);
+          setName("");
+        }}
+      >
         Create Team
       </Button>
     </>

@@ -58,3 +58,19 @@ class TeamView(web.View):
                 )
                 await cur.execute(sql)
                 return web.json_response({"id": result[0], "name": body["name"]})
+
+    async def delete(self):
+        await check_authorized(self.request)
+        team_id = self.request.match_info.get("id")
+
+        async with self.request.app["db_pool"].acquire() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(
+                    "DELETE FROM OWNERS WHERE TEAM = '{}'".format(team_id)
+                )
+                await cur.execute("DELETE FROM MEMBERS WHERE ID = '{}'".format(team_id))
+                await cur.execute("DELETE FROM EVENTS WHERE ID = '{}'".format(team_id))
+                await cur.execute("DELETE FROM TEAMS WHERE ID = '{}'".format(team_id))
+                resp_status = 204
+                return web.json_response("", status=resp_status)
+

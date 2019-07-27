@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import wretch from "wretch";
+import { format } from "date-fns";
 
 export default Event = ({ match }) => {
-  const [event, setEvent] = useState({ members: [] });
+  const [event, setEvent] = useState({ date: new Date(), members: [] });
 
   const fetchData = async (url, callback) => {
     await wretch(url)
@@ -20,7 +21,7 @@ export default Event = ({ match }) => {
   return (
     <>
       <h1>{event.name}</h1>
-      <h1>{event.date}</h1>
+      <h1>{format(new Date(event.date), "P p")}</h1>
 
       <ul>
         {event.members &&

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import wretch from "wretch";
+import { Dialog, DialogActions, Button } from "@material-ui/core";
 import { TeamForm, TeamList } from "../components";
 
 const Teams = () => {
@@ -20,6 +21,10 @@ const Teams = () => {
       .catch(error => console.log(error));
   };
 
+  const onDelete = async id => {
+    await wretch(`/api/teams/${id}`).delete();
+  };
+
   useEffect(() => {
     fetchData("/api/teams", setTeams);
   }, []);
@@ -31,7 +36,7 @@ const Teams = () => {
 
   return (
     <>
-      <TeamList items={teams} />
+      <TeamList items={teams} onDelete={onDelete} />
       <TeamForm submit={createTeam} />
     </>
   );
