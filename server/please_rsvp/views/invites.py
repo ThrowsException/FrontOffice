@@ -5,21 +5,10 @@ from aiohttp_security import check_authorized
 
 from aiohttp import web
 
+from please_rsvp.utils.send_invite import send_invites
+
 
 class InviteView(web.View):
-    def __send_invite(self, email, code):
-        reply_url = """<a href="http://localhost:8080/invites/{code}?r=no">
-            For No</a><a href="http://localhost:8080/invites/{code}?r=yes">
-                For Yes</a>""".format(
-            code=code
-        )
-        content = reply_url
-        port = os.getenv("SMTP_PORT", 0)
-        host = os.getenv("SMTP_HOST", "smtp")
-        with smtplib.SMTP(host, port=port) as smtp:
-            smtp.sendmail("me@me.com", email, content)
-        return web.Response(text="Thanks")
-
     async def get(self):
         await check_authorized(self.request)
         invite_id = self.request.match_info.get("id")
@@ -72,22 +61,24 @@ class InviteView(web.View):
                 await cur.execute(sql)
                 results = await cur.fetchall()
 
-                # needs_invite = []
-                # for record in results:
-                #     sql = dedent(
-                #         """
-                #         INSERT INTO invites (event, member, reply)
-                #         VALUES ('{}', '{}', 'false') RETURNING id
-                #     """.format(
-                #             record[0], record[1]
-                #         )
-                #     )
-                #     await cur.execute(sql)
-                #     result = await cur.fetchone()
+                needs_invite = []
+                for record in results:
+                    sql = dedent(
+                        """
+                        INSERT INTO invites (event, member, reply)
+                        VALUES ('{}', '{}', 'false') 
+                        ON CONFLICT DO NOTHING
+                        RETURNING id
+                       
+                    """.format(
+                            record[0], record[1]
+                        )
+                    )
+                    await cur.execute(sql)
+                    result = await cur.fetchone()
+                    if result:
+                        needs_invite.append({"email": record[2], "code": result[0]})
 
-                #     needs_invite.append({"email": record[2], "code": result[0]})
-
-                # for record in needs_invite:
-                #     self.__send_invite(**record)
+                await send_invites(needs_invite)
 
         return web.json_response({"status": "Invites sent"})

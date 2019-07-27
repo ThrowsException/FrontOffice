@@ -9,56 +9,12 @@ import arrow
 from aiohttp_security import check_authorized
 import aiohttp
 from aiohttp import web
+from please_rsvp.utils.send_invite import send_invites
 
 
 def myconverter(o):
     if isinstance(o, datetime.datetime):
         return o.__str__()
-
-
-async def send_invite(invites):
-    reply_url = """
-    <a href="http://localhost:8080/invites/{code}?r=no">For No</a>
-    <a href="http://localhost:8080/invites/{code}?r=yes"> For Yes</a>
-    """
-
-    if os.getenv("EMAIL_API_KEY", None):
-
-        personalizations = []
-        for invite in invites:
-            personalizations.append(
-                {
-                    "to": [{"email": invite["email"]}],
-                    "substitutions": {"{code}": str(invite["code"])},
-                }
-            )
-        mail = {
-            "personalizations": personalizations,
-            "from": {"email": "me@oneillc.io"},
-            "content": [{"type": "text/html", "value": reply_url}],
-            "subject": "Game Reminder",
-        }
-
-        async with aiohttp.ClientSession() as session:
-            async with session.post(
-                "https://api.sendgrid.com/v3/mail/send",
-                headers={
-                    "Authorization": "Bearer {}".format(os.getenv("EMAIL_API_KEY")),
-                    "Content-Type": "application/json",
-                },
-                json=mail,
-            ) as resp:
-                return resp.status
-
-    else:
-        for invite in invites:
-            content = reply_url.format({"code": invite["code"]})
-            port = os.getenv("SMTP_PORT", 0)
-            host = os.getenv("SMTP_HOST", "smtp")
-            with smtplib.SMTP(host, port=port) as smtp:
-                smtp.sendmail("me@me.com", invite["email"], content)
-
-        return 200
 
 
 class TeamEvents(web.View):
@@ -73,7 +29,6 @@ class TeamEvents(web.View):
             async with conn.cursor() as cur:
                 await cur.execute(sql)
                 result = await cur.fetchall()
-                print(result)
                 items = [
                     {
                         "id": x[0],
@@ -182,7 +137,7 @@ class EventView(web.View):
 
                 #     needs_invite.append({"email": member[1], "code": invite[0]})
 
-                # resp_status = await send_invite(needs_invite)
+                # resp_status = await send_invites(needs_invite)
                 resp_status = 200
                 return web.json_response(
                     {"id": result[0], "name": body["name"], "date": body["date"]},
