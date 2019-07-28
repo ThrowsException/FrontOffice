@@ -1,4 +1,3 @@
-export { default as Login } from "./Login";
 export { default as EventForm } from "./EventForm";
 export { default as EventList } from "./EventList";
 export { default as PlayerForm } from "./PlayerForm";

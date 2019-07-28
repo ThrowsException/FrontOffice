@@ -25,7 +25,7 @@ boostrap docker containers, environment variables and start the app
 
 ```bash
 ./startup && source ./build/test_env
-python server/please_rsvp/app.py
+adev runserver --app-factory make_app server/please_rsvp/app.py
 ```
 
 ### POST /teams
