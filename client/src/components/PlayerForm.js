@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Button, TextField } from "@material-ui/core";
 import styled from "styled-components";
 
 const StyledForm = styled.form`
@@ -28,37 +27,34 @@ const PlayerForm = ({ submit }) => {
 
   return (
     <StyledForm onSubmit={submitForm}>
-      <TextField
+      <input
         required
-        fullWidth
         label="Name"
         name="name"
         onChange={handleInputChange}
         value={member.name}
       />
-      <TextField
+      <input
         required
-        fullWidth
         label="Email"
         name="email"
         onChange={handleInputChange}
         value={member.email}
       />
-      <TextField
-        fullWidth
+      <input
         label="Phone"
         name="phone"
         onChange={handleInputChange}
         value={member.phone}
       />
-      <Button
+      <button
         type="submit"
         variant="contained"
         color="primary"
         onClick={submitForm}
       >
         Create Member
-      </Button>
+      </button>
     </StyledForm>
   );
 };

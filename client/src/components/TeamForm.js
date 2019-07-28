@@ -1,5 +1,26 @@
 import React, { useState } from "react";
-import { Button, TextField } from "@material-ui/core";
+import styled from "styled-components";
+
+const StyledInput = styled.input`
+  font-size: 1em;
+  padding: 1em 0;
+  margin-bottom: 8px;
+  padding-left: 1em;
+  outline: 0;
+  border-width: 0 0 2px;
+  border-color: black;
+  margin-bottom: 2px;
+  box-sizing: border-box;
+  background: none;
+`;
+
+const StyledButton = styled.button`
+  background-color: #58a4b0;
+  color: white;
+  font-size: 1em;
+  padding: 1em;
+  border: 0;
+`;
 
 const TeamForm = ({ submit }) => {
   const [name, setName] = useState("");
@@ -12,24 +33,22 @@ const TeamForm = ({ submit }) => {
   return (
     <>
       <div>
-        <TextField
-          label="Team Name"
+        <StyledInput
+          placeholder="Team Name"
           name="team"
           onChange={handleInputChange}
           value={name}
         />
       </div>
-      <Button
+      <StyledButton
         type="submit"
-        variant="contained"
-        color="primary"
         onClick={() => {
           submit(name);
           setName("");
         }}
       >
         Create Team
-      </Button>
+      </StyledButton>
     </>
   );
 };

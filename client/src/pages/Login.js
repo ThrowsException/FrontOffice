@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import wretch from "wretch";
 import styled from "styled-components";
 
@@ -43,6 +43,12 @@ const Login = ({ history }) => {
   });
   const [formError, setFormError] = useState();
 
+  useEffect(() => {
+    if (document.cookie.indexOf("logged_in") > -1) {
+      history.push("/teams");
+    }
+  });
+
   const handleInputChange = e => {
     const { name, value } = e.target;
     setValues({ ...user, [name]: value });
@@ -53,6 +59,7 @@ const Login = ({ history }) => {
     await wretch("/api/login")
       .post({ username: user.email, password: user.password })
       .json(() => {
+        document.cookie = "logged_in=1";
         history.push("/teams");
       })
       .catch(error => setFormError(error));

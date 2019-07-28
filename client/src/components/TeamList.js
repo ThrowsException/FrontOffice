@@ -1,28 +1,34 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent
-} from "@material-ui/core";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  max-width: 320px;
-`;
 
 const TeamCard = styled.div`
-  background: ${p => (p.row % 2 == 0 ? "#D3D3D3" : "white")};
   display: flex;
   align-items: center;
 `;
 
 const TeamName = styled.h3`
-  flex: 1;
   margin: 16px;
+  font-size: 32px;
+  font-weight: 4;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  flex: 0.5;
+`;
+
+const StyledButton = styled.button`
+  background-color: #f71735;
+  color: white;
+  font-size: 1em;
+  padding: 1em;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+
+  :focus {
+    outline: 0;
+  }
 `;
 
 const TeamList = ({ items, onDelete }) => {
@@ -32,41 +38,27 @@ const TeamList = ({ items, onDelete }) => {
   const deleteTeam = async () => {
     await onDelete(id);
     setDialogVisible(false);
+    onDelete(item.id);
   };
 
   return (
-    <Container>
-      {items.map((item, i) => (
-        <TeamCard key={item.id} row={i}>
-          <TeamName>
-            <Link to={`/teams/${item.id}`}>{item.name}</Link>
-          </TeamName>
-          <Button
-            color="secondary"
-            variant="contained"
+    <>
+      {items.length == 0 && <h1> Nothing Here</h1>}
+      {items.map(item => (
+        <TeamCard key={item.id}>
+          <StyledLink to={`/teams/${item.id}`}>
+            <TeamName>{item.name}</TeamName>
+          </StyledLink>
+          <StyledButton
             onClick={() => {
-              setId(item.id);
-              setDialogVisible(true);
+              onDelete(item.id);
             }}
           >
             Delete
-          </Button>
+          </StyledButton>
         </TeamCard>
       ))}
-      <Dialog open={dialogVisible}>
-        <DialogContent dividers>
-          This action can be be undone and will delete all players and events.
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDialogVisible(false)} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={() => deleteTeam()} color="primary">
-            Ok
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Container>
+    </>
   );
 };
 

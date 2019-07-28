@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { format } from "date-fns";
-import { Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 const list = {
@@ -65,7 +64,7 @@ const EventList = ({ events }) => {
                   </Link>
                 </EventTitle>
                 <EventTitle>{format(new Date(event.date), "P p")}</EventTitle>
-                <Button color="secondary">Delete</Button>
+                <button color="secondary">Delete</button>
               </EventDetails>
             </Event>
           ))}

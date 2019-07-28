@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import wretch from "wretch";
-import { Button } from "@material-ui/core";
 import { format } from "date-fns";
 import styled from "styled-components";
 
@@ -32,9 +31,9 @@ export default Event = ({ match }) => {
     <>
       <h1>{event.name}</h1>
       <h1>{format(new Date(event.date), "P p")}</h1>
-      <Button variant="contained" color="primary" onClick={sendInvites}>
+      <button variant="contained" color="primary" onClick={sendInvites}>
         Send Invites
-      </Button>
+      </button>
       <ul>
         {event.members &&
           event.members.map(e => (

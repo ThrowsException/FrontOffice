@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { Button, TextField } from "@material-ui/core";
-import { DateTimePicker } from "@material-ui/pickers";
 import { startOfToday, format } from "date-fns";
 
 const EventForm = ({ submit }) => {
@@ -8,7 +6,9 @@ const EventForm = ({ submit }) => {
     name: ""
   });
 
-  const [selectedDate, handleDateChange] = useState(startOfToday());
+  const [selectedDate, handleDateChange] = useState(
+    format(startOfToday(), "yyyy-MM-dd")
+  );
 
   const handleInputChange = e => {
     const { name, value } = e.target;
@@ -16,20 +16,20 @@ const EventForm = ({ submit }) => {
   };
   return (
     <>
-      <TextField
+      <input
         label="Event Name"
         name="name"
         onChange={handleInputChange}
         value={form.name}
       />
-      <DateTimePicker
-        variant="inline"
+      <input
+        type="date"
         name="date"
-        label="Basic example"
+        min={format(new Date(), "yyyy-MM-dd")}
         value={selectedDate}
         onChange={handleDateChange}
       />
-      <Button
+      <button
         variant="contained"
         color="primary"
         onClick={() =>
@@ -37,7 +37,7 @@ const EventForm = ({ submit }) => {
         }
       >
         Create Event
-      </Button>
+      </button>
     </>
   );
 };

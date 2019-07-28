@@ -1,5 +1,4 @@
-aiohttp_security
-aiohttp_session
+aiohttp_security[session]
 aiohttp
 aiopg
 aioredis
