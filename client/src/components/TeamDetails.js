@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import wretch from "wretch";
 import { PlayerList, EventList, PlayerForm, EventForm } from "./";
+import { format, parseISO } from "date-fns";
 
 const TeamDetails = ({ match }) => {
   const [team, setTeam] = useState([{ name: "Loading..." }]);
@@ -29,11 +30,16 @@ const TeamDetails = ({ match }) => {
       .catch(error => console.log(error));
   };
 
-  const createEvent = async (name, date) => {
-    console.log(date);
+  const createEvent = async ({ name, date, hour, minute, period }) => {
+    hour = period === "PM" ? parseInt(hour) + 12 : hour;
+    let l = parseISO(
+      `${date} ${("00" + hour).substr(-2, 2)}:${("00" + minute).substr(-2, 2)}`,
+      "P p",
+      new Date()
+    );
     const event = await postData("/api/events", {
       name,
-      date,
+      date: format(l, "yyyy-MM-dd HH:mm:ssxxxxx"),
       team: match.params.id
     });
     setEvents([...events, event]);

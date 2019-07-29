@@ -22,21 +22,22 @@ const NavTitle = styled.h4`
   flex: 1;
 `;
 
-const NavItem = styled.a`
-  text-decoration: none;
-  margin: 0.5em;
-
-  :link,
-  :visited,
-  :active,
-  :hover {
-    color: white;
-  }
-`;
-
 const Root = styled.div`
   height: 100vh;
   max-width: 960px;
+`;
+
+const StyledButton = styled.button`
+  background-color: #58a4b0;
+  color: white;
+  font-size: 1em;
+  padding: 1em;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+
+  :focus {
+    outline: 0;
+  }
 `;
 
 const Teams = () => {
@@ -85,9 +86,9 @@ const Teams = () => {
           <Content>
             <Root>
               <TeamList items={teams} onDelete={onDelete} />
-              <button onClick={() => setFormVisible(!!!formVisible)}>
+              <StyledButton onClick={() => setFormVisible(!!!formVisible)}>
                 + Add Team
-              </button>
+              </StyledButton>
               {formVisible && <TeamForm submit={createTeam} />}
             </Root>
           </Content>
