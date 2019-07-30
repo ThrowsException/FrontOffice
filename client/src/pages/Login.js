@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import wretch from "wretch";
 import styled from "styled-components";
+import { Formik } from "formik";
 
 const Container = styled.div`
   display: flex;
@@ -37,64 +38,73 @@ const LoginButton = styled.button`
 `;
 
 const Login = ({ history }) => {
-  const [user, setValues] = useState({
-    email: "",
-    password: ""
-  });
-  const [formError, setFormError] = useState();
-
   useEffect(() => {
     if (document.cookie.indexOf("logged_in") > -1) {
       history.push("/teams");
     }
   });
 
-  const handleInputChange = e => {
-    const { name, value } = e.target;
-    setValues({ ...user, [name]: value });
-  };
-
-  const submit = async e => {
-    e.preventDefault();
+  const submit = async (values, { setSubmitting, setErrors }) => {
     await wretch("/api/login")
-      .post({ username: user.email, password: user.password })
+      .post({ username: values.email, password: values.password })
       .json(() => {
         document.cookie = "logged_in=1";
         history.push("/teams");
       })
-      .catch(error => setFormError(error));
+      .catch(e => setErrors({ api: e.message }))
+      .finally(setSubmitting(false));
   };
 
   return (
-    <Container>
-      <Content>
-        <h2 style={{ width: "100%", textAlign: "center" }}>Front Office</h2>
-        {formError && <span style={{ color: "red" }}>{formError.message}</span>}
-        <form onSubmit={submit}>
-          <StyledInput
-            label="Email"
-            name="email"
-            onChange={handleInputChange}
-            value={user.email}
-            autoComplete="email"
-            autoFocus
-            placeholder="Email"
-          />
-          <StyledInput
-            label="Password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            onChange={handleInputChange}
-            value={user.password}
-            placeholder="Password"
-          />
-          <LoginButton type="submit" onClick={submit}>
-            Login
-          </LoginButton>
-        </form>
-      </Content>
-    </Container>
+    <Formik initialValues={{ email: "", password: "" }} onSubmit={submit}>
+      {props => {
+        const {
+          values,
+          isSubmitting,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          errors
+        } = props;
+        return (
+          <Container>
+            <Content>
+              <h2 style={{ width: "100%", textAlign: "center" }}>
+                Front Office
+              </h2>
+              {errors && errors.api && (
+                <span style={{ color: "red" }}>{errors.api}</span>
+              )}
+              <form onSubmit={handleSubmit}>
+                <StyledInput
+                  label="Email"
+                  name="email"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.email}
+                  autoComplete="email"
+                  autoFocus
+                  placeholder="Email"
+                />
+                <StyledInput
+                  label="Password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.password}
+                  placeholder="Password"
+                />
+                <LoginButton type="submit" disabled={isSubmitting}>
+                  Login
+                </LoginButton>
+              </form>
+            </Content>
+          </Container>
+        );
+      }}
+    </Formik>
   );
 };
 
