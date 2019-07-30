@@ -2,6 +2,26 @@ import React, { useState, useEffect } from "react";
 import wretch from "wretch";
 import { PlayerList, EventList, PlayerForm, EventForm } from "./";
 import { format, parseISO } from "date-fns";
+import { Composition } from "atomic-layout";
+import styled from "styled-components";
+
+const areas = `
+ header
+ content
+`;
+
+const NavBar = styled.div`
+  display: flex;
+  align-items center;
+  justify-content: center;
+  padding: 0 1em;
+  background: #1B1B1E
+  color: white;
+`;
+
+const NavTitle = styled.h4`
+  flex: 1;
+`;
 
 const TeamDetails = ({ match }) => {
   const [team, setTeam] = useState([{ name: "Loading..." }]);
@@ -56,15 +76,26 @@ const TeamDetails = ({ match }) => {
   };
 
   return (
-    <>
-      <h1>{team[0].name}</h1>
-      <h1>Upcoming Events</h1>
-      <EventList events={events} />
-      <EventForm submit={createEvent} />
-      <h1>Players</h1>
-      <PlayerList members={members} />
-      <PlayerForm submit={createMember} />
-    </>
+    <Composition areas={areas}>
+      {({ Header, Content }) => (
+        <>
+          <Header>
+            <NavBar>
+              <NavTitle>Front Office</NavTitle>
+            </NavBar>
+          </Header>
+          <Content>
+            <h1>{team[0].name}</h1>
+            <h2>Upcoming Events</h2>
+            <EventList events={events} />
+            <EventForm submit={createEvent} />
+            <h2>Players</h2>
+            <PlayerList members={members} />
+            <PlayerForm submit={createMember} />
+          </Content>
+        </>
+      )}
+    </Composition>
   );
 };
 
