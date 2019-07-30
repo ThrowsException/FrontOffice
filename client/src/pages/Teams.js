@@ -3,6 +3,7 @@ import wretch from "wretch";
 import { TeamForm, TeamList } from "../components";
 import { Composition } from "atomic-layout";
 import styled from "styled-components";
+import Button from "../components/Button";
 
 const areas = `
   header
@@ -25,19 +26,6 @@ const NavTitle = styled.h4`
 const Root = styled.div`
   height: 100vh;
   max-width: 960px;
-`;
-
-const StyledButton = styled.button`
-  background-color: #58a4b0;
-  color: white;
-  font-size: 1em;
-  padding: 1em;
-  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-
-  :focus {
-    outline: 0;
-  }
 `;
 
 const Teams = () => {
@@ -88,9 +76,9 @@ const Teams = () => {
           <Content>
             <Root>
               <TeamList items={teams} onDelete={onDelete} />
-              <StyledButton onClick={() => setFormVisible(!!!formVisible)}>
+              <Button onClick={() => setFormVisible(!!!formVisible)}>
                 + Add Team
-              </StyledButton>
+              </Button>
               {formVisible && <TeamForm submit={createTeam} />}
             </Root>
           </Content>

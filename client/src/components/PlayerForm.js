@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Formik } from "formik";
+import Button from "./Button";
 
 const StyledForm = styled.form`
   min-width: 320px;
@@ -68,9 +69,9 @@ const PlayerForm = ({ submit }) => {
             onChange={handleChange}
             value={values.phone}
           />
-          <button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting}>
             Create Member
-          </button>
+          </Button>
         </StyledForm>
       )}
     </Formik>

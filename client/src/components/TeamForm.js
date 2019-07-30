@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import Button from "./Button";
 
 const StyledInput = styled.input`
   font-size: 1em;
@@ -12,14 +13,6 @@ const StyledInput = styled.input`
   margin-bottom: 2px;
   box-sizing: border-box;
   background: none;
-`;
-
-const StyledButton = styled.button`
-  background-color: #58a4b0;
-  color: white;
-  font-size: 1em;
-  padding: 1em;
-  border: 0;
 `;
 
 const TeamForm = ({ submit }) => {
@@ -40,7 +33,7 @@ const TeamForm = ({ submit }) => {
           value={name}
         />
       </div>
-      <StyledButton
+      <Button
         type="submit"
         onClick={() => {
           submit(name);
@@ -48,7 +41,7 @@ const TeamForm = ({ submit }) => {
         }}
       >
         Create Team
-      </StyledButton>
+      </Button>
     </>
   );
 };

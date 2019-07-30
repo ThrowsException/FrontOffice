@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import wretch from "wretch";
 import styled from "styled-components";
 import { Formik } from "formik";
+import Button from "../components/Button";
 
 const Container = styled.div`
   display: flex;
@@ -26,15 +27,6 @@ const StyledInput = styled.input`
   border-radius: 4px;
   padding-left: 1em;
   box-sizing: border-box;
-`;
-
-const LoginButton = styled.button`
-  background-color: #58a4b0;
-  color: white;
-  font-size: 1em;
-  padding: 1em 0;
-  width: 100%;
-  border-radius: 2px;
 `;
 
 const Login = ({ history }) => {
@@ -96,9 +88,9 @@ const Login = ({ history }) => {
                   value={values.password}
                   placeholder="Password"
                 />
-                <LoginButton type="submit" disabled={isSubmitting}>
+                <Button type="submit" disabled={isSubmitting}>
                   Login
-                </LoginButton>
+                </Button>
               </form>
             </Content>
           </Container>
