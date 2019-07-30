@@ -69,9 +69,11 @@ const Teams = () => {
   }, []);
 
   const createTeam = async name => {
-    const team = await postData("/api/teams", { name });
-    setTeams([...teams, team]);
-    setFormVisible(false);
+    if (name) {
+      const team = await postData("/api/teams", { name });
+      setTeams([...teams, team]);
+      setFormVisible(false);
+    }
   };
 
   return (
