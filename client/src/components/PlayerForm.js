@@ -65,6 +65,7 @@ const PlayerForm = ({ submit }) => {
           {errors.email && touched.email && <div>{errors.email}</div>}
           <input
             name="phone"
+            placeholder="phone"
             onBlur={handleBlur}
             onChange={handleChange}
             value={values.phone}

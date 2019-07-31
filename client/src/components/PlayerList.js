@@ -6,7 +6,7 @@ const PlayerList = ({ members }) => {
       {members.length > 0 ? (
         <ul>
           {members.map(member => (
-            <li key={member.id}>
+            <li key={member.email}>
               {member.name} {member.email}
             </li>
           ))}

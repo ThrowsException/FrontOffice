@@ -72,7 +72,7 @@ const TeamDetails = ({ match }) => {
       phone,
       team: match.params.id
     });
-    setMembers([...members, member]);
+    setMembers([...members, { name, email }]);
   };
 
   return (
