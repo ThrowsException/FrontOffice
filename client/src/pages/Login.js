@@ -49,53 +49,48 @@ const Login = ({ history }) => {
 
   return (
     <Formik initialValues={{ email: "", password: "" }} onSubmit={submit}>
-      {props => {
-        const {
-          values,
-          isSubmitting,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          errors
-        } = props;
-        return (
-          <Container>
-            <Content>
-              <h2 style={{ width: "100%", textAlign: "center" }}>
-                Front Office
-              </h2>
-              {errors && errors.api && (
-                <span style={{ color: "red" }}>{errors.api}</span>
-              )}
-              <form onSubmit={handleSubmit}>
-                <StyledInput
-                  label="Email"
-                  name="email"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.email}
-                  autoComplete="email"
-                  autoFocus
-                  placeholder="Email"
-                />
-                <StyledInput
-                  label="Password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.password}
-                  placeholder="Password"
-                />
-                <Button type="submit" disabled={isSubmitting}>
-                  Login
-                </Button>
-              </form>
-            </Content>
-          </Container>
-        );
-      }}
+      {({
+        values,
+        isSubmitting,
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        errors
+      }) => (
+        <Container>
+          <Content>
+            <h2 style={{ width: "100%", textAlign: "center" }}>Front Office</h2>
+            {errors && errors.api && (
+              <span style={{ color: "red" }}>{errors.api}</span>
+            )}
+            <form onSubmit={handleSubmit}>
+              <StyledInput
+                label="Email"
+                name="email"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.email}
+                autoComplete="email"
+                autoFocus
+                placeholder="Email"
+              />
+              <StyledInput
+                label="Password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.password}
+                placeholder="Password"
+              />
+              <Button type="submit" disabled={isSubmitting}>
+                Login
+              </Button>
+            </form>
+          </Content>
+        </Container>
+      )}
     </Formik>
   );
 };
