@@ -13,7 +13,6 @@ const EventForm = ({ submit }) => {
         period: "PM"
       }}
       onSubmit={values => {
-        console.log(values);
         submit(values);
       }}
     >

@@ -51,12 +51,7 @@ const EventList = ({ events }) => {
       {events.length > 0 ? (
         <Events animate="visible" initial="hidden" variants={list}>
           {events.map((event, i) => (
-            <Event
-              variants={items}
-              key={event.id}
-              animate="visible"
-              initial="hidden"
-            >
+            <Event key={event.id} variants={items}>
               <EventDetails>
                 <EventTitle>
                   <Link to={`/teams/${event.team}/events/${event.id}`}>

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const StyledButton = styled.button`
+export default styled.button`
   background-color: #58a4b0;
   color: white;
   font-size: 1em;
@@ -14,5 +14,3 @@ const StyledButton = styled.button`
     outline: 0;
   }
 `;
-
-export default StyledButton;

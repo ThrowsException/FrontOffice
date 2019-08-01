@@ -1,4 +1,7 @@
-const StyledInput = styled.input`
+import React from "react";
+import styled from "styled-components";
+
+export default styled.input`
   font-size: 1em;
   padding: 1em 0;
   margin-bottom: 8px;
@@ -10,5 +13,3 @@ const StyledInput = styled.input`
   box-sizing: border-box;
   background: none;
 `;
-
-export default StyledInput;
