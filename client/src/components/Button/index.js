@@ -8,6 +8,8 @@ const StyledButton = styled.button`
   padding: 1em;
   border: 0;
 
+  width: ${p => (p.fullWidth ? "100%" : "")}
+
   :focus {
     outline: 0;
   }

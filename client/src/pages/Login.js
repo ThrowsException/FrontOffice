@@ -84,7 +84,7 @@ const Login = ({ history }) => {
                 value={values.password}
                 placeholder="Password"
               />
-              <Button type="submit" disabled={isSubmitting}>
+              <Button fullWidth type="submit" disabled={isSubmitting}>
                 Login
               </Button>
             </form>
