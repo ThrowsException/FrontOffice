@@ -2,10 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import { Formik } from "formik";
 import Button from "./Button";
+import Input from "./Input";
 
 const StyledForm = styled.form`
   min-width: 320px;
-  max-width: 600px;
+  max-width: 960px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const validate = values => {
@@ -45,7 +48,7 @@ const PlayerForm = ({ submit }) => {
         /* and other goodies */
       }) => (
         <StyledForm onSubmit={handleSubmit}>
-          <input
+          <Input
             required
             name="name"
             placeholder="Name"
@@ -54,7 +57,7 @@ const PlayerForm = ({ submit }) => {
             value={values.name}
           />
           {errors.name && touched.name && <div>{errors.name}</div>}
-          <input
+          <Input
             required
             name="email"
             placeholder="Email"
@@ -63,7 +66,7 @@ const PlayerForm = ({ submit }) => {
             value={values.email}
           />
           {errors.email && touched.email && <div>{errors.email}</div>}
-          <input
+          <Input
             name="phone"
             placeholder="phone"
             onBlur={handleBlur}

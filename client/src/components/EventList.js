@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import styled from "styled-components";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
+import Button from "../components/Button";
 
 const list = {
   visible: {
@@ -33,8 +34,7 @@ const Event = styled(motion.div)`
   max-width: 960px;
 `;
 
-const EventTitle = styled.h2`
-  font-weight: 300;
+const EventTitle = styled.span`
   text-transform: capitalize;
   flex: 0.3;
 `;
@@ -42,7 +42,7 @@ const EventTitle = styled.h2`
 const EventDetails = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 5px;
+  padding: 10px 2px;
 `;
 
 const EventList = ({ events }) => {
@@ -59,7 +59,7 @@ const EventList = ({ events }) => {
                   </Link>
                 </EventTitle>
                 <EventTitle>{format(new Date(event.date), "P p")}</EventTitle>
-                <button color="secondary">Delete</button>
+                {/* <Button variant="delete">Delete</Button> */}
               </EventDetails>
             </Event>
           ))}

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { startOfToday, format } from "date-fns";
 import { Formik } from "formik";
+import Button from "../components/Button";
+import Input from "../components/Input";
 
 const EventForm = ({ submit }) => {
   return (
@@ -17,14 +19,21 @@ const EventForm = ({ submit }) => {
       }}
     >
       {({ values, handleChange, handleBlur, handleSubmit }) => (
-        <form onSubmit={handleSubmit}>
-          <input
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            maxWidth: "960px"
+          }}
+        >
+          <Input
             name="name"
             placeholder="name"
             onChange={handleChange}
             value={values.name}
           />
-          <input
+          <Input
             required
             type="date"
             name="date"
@@ -34,40 +43,42 @@ const EventForm = ({ submit }) => {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          <select
-            name="hour"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.hour}
-          >
-            {[...Array(12).keys()].map(i => (
-              <option key={i} value={i + 1}>
-                {i + 1}
-              </option>
-            ))}
-          </select>
-          <select
-            name="minute"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.minute}
-          >
-            {[...Array(60).keys()].map(i => (
-              <option key={i} value={("00" + i).substr(-2, 2)}>
-                {("00" + i).substr(-2, 2)}
-              </option>
-            ))}
-          </select>
-          <select
-            name="period"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.period}
-          >
-            <option value="AM">AM</option>
-            <option value="PM">PM</option>
-          </select>
-          <button type="submit">Create Event</button>
+          <div>
+            <select
+              name="hour"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.hour}
+            >
+              {[...Array(12).keys()].map(i => (
+                <option key={i} value={i + 1}>
+                  {i + 1}
+                </option>
+              ))}
+            </select>
+            <select
+              name="minute"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.minute}
+            >
+              {[...Array(60).keys()].map(i => (
+                <option key={i} value={("00" + i).substr(-2, 2)}>
+                  {("00" + i).substr(-2, 2)}
+                </option>
+              ))}
+            </select>
+            <select
+              name="period"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.period}
+            >
+              <option value="AM">AM</option>
+              <option value="PM">PM</option>
+            </select>
+          </div>
+          <Button type="submit">Create Event</Button>
         </form>
       )}
     </Formik>

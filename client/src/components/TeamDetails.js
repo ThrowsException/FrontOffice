@@ -23,6 +23,10 @@ const NavTitle = styled.h4`
   flex: 1;
 `;
 
+const TeamName = styled.h1`
+  font-size: 4em;
+`;
+
 const TeamDetails = ({ match }) => {
   const [team, setTeam] = useState([{ name: "Loading..." }]);
 
@@ -85,7 +89,7 @@ const TeamDetails = ({ match }) => {
             </NavBar>
           </Header>
           <Content>
-            <h1>{team[0].name}</h1>
+            <TeamName>{team[0].name}</TeamName>
             <h2>Upcoming Events</h2>
             <EventList events={events} />
             <EventForm submit={createEvent} />
