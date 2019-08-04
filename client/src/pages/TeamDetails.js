@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import wretch from "wretch";
-import { PlayerList, EventList, PlayerForm, EventForm } from "./";
+import { PlayerList, EventList, PlayerForm, EventForm } from "../components";
 import { format, parseISO } from "date-fns";
 import { Composition } from "atomic-layout";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const areas = `
- header
- content
+ header header
+ aside content
 `;
 
 const NavBar = styled.div`
@@ -27,15 +28,24 @@ const TeamName = styled.h1`
   font-size: 4em;
 `;
 
+const Root = styled.div`
+  display: flex;
+  flex-flow: column wrap;
+  place-items: center;
+`;
+
+const Container = styled.div`
+  flex: 1
+  width: 960px;
+`;
+
 const TeamDetails = ({ match }) => {
   const [team, setTeam] = useState([{ name: "Loading..." }]);
 
-  const [members, setMembers] = useState([]);
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
     fetchData(`/api/teams/${match.params.id}`, setTeam);
-    fetchData(`/api/teams/${match.params.id}/members`, setMembers);
     fetchData(`/api/teams/${match.params.id}/events`, setEvents);
   }, []);
 
@@ -69,33 +79,32 @@ const TeamDetails = ({ match }) => {
     setEvents([...events, event]);
   };
 
-  const createMember = async ({ name, email, phone }) => {
-    const member = await postData("/api/members", {
-      name,
-      email,
-      phone,
-      team: match.params.id
-    });
-    setMembers([...members, { name, email }]);
-  };
-
   return (
-    <Composition areas={areas}>
-      {({ Header, Content }) => (
+    <Composition areas={areas} templateCols="2fr 10fr">
+      {({ Header, Aside, Content }) => (
         <>
           <Header>
             <NavBar>
               <NavTitle>Front Office</NavTitle>
             </NavBar>
           </Header>
+          <Aside style={{ background: "#0F0F0F0f" }}>
+            <Link to={`/teams/${match.params.id}`}>
+              <h3>Home</h3>
+            </Link>
+            <Link to={`/teams/${match.params.id}/roster`}>
+              <h3>Roster</h3>
+            </Link>
+          </Aside>
           <Content>
-            <TeamName>{team[0].name}</TeamName>
-            <h2>Upcoming Events</h2>
-            <EventList events={events} />
-            <EventForm submit={createEvent} />
-            <h2>Players</h2>
-            <PlayerList members={members} />
-            <PlayerForm submit={createMember} />
+            <Root>
+              <Container>
+                <TeamName>{team[0].name}</TeamName>
+                <h2>Upcoming Events</h2>
+                <EventList events={events} />
+                <EventForm submit={createEvent} />
+              </Container>
+            </Root>
           </Content>
         </>
       )}

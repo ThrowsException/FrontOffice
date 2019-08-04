@@ -59,6 +59,7 @@ const EventList = ({ events }) => {
                   </Link>
                 </EventTitle>
                 <EventTitle>{format(new Date(event.date), "P p")}</EventTitle>
+                <EventTitle>14 Checked In</EventTitle>
                 {/* <Button variant="delete">Delete</Button> */}
               </EventDetails>
             </Event>

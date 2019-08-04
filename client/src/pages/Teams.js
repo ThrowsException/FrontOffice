@@ -12,7 +12,7 @@ const areas = `
 
 const NavBar = styled.div`
   display: flex;
-  align-items center;
+  align-items: center;
   justify-content: center;
   padding: 0 1em;
   background: #1B1B1E
