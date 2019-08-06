@@ -7,6 +7,12 @@ REPLY_URL = """
     <a href="http://localhost:8000/api/invites/{code}?r=yes"> For Yes</a>
     """
 
+if os.getenv("EMAIL_API_KEY"):
+    """
+    <a href="https://frontoffice.app/api/invites/{code}?r=no">For No</a>
+    <a href="https://frontoffice.app/api/invites/{code}?r=yes"> For Yes</a>
+    """
+
 
 async def send_invites(invites):
     if os.getenv("EMAIL_API_KEY", None):
