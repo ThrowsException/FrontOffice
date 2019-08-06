@@ -38,7 +38,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "styled-components": "^4.3.2",
-    "typeface-roboto": "0.0.54",
+    "typeface-montserrat": "0.0.54",
     "wretch": "^1.5.3"
   }
 }

@@ -7,7 +7,7 @@ import Teams from "./pages/Teams";
 import Event from "./pages/Event";
 import Features from "./pages/Features";
 import Roster from "./pages/Roster";
-import "typeface-roboto";
+import "typeface-montserrat";
 
 function AppRouter() {
   return (

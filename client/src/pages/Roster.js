@@ -34,8 +34,9 @@ const Root = styled.div`
 `;
 
 const Container = styled.div`
-  flex: 1
-  width: 960px;
+  flex: 1;
+  width: 100%;
+  max-width: 960px;
 `;
 
 const TeamDetails = ({ match }) => {
@@ -74,7 +75,7 @@ const TeamDetails = ({ match }) => {
   };
 
   return (
-    <Composition areas={areas} templateCols="2fr 10fr">
+    <Composition areas={areas} templateCols="auto 1fr">
       {({ Header, Aside, Content }) => (
         <>
           <Header>
@@ -85,6 +86,9 @@ const TeamDetails = ({ match }) => {
           <Aside style={{ background: "#0F0F0F0f" }}>
             <Link to={`/teams/${match.params.id}`}>
               <h3>Home</h3>
+            </Link>
+            <Link to={`/teams/${match.params.id}`}>
+              <h3>{team[0]["name"]}</h3>
             </Link>
             <Link to={`/teams/${match.params.id}/roster`}>
               <h3>Roster</h3>

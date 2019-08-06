@@ -31,3 +31,4 @@ CREATE TABLE owners (
 );
 
 CREATE UNIQUE INDEX team_member ON members (email, team);
+CREATE UNIQUE INDEX member_invites ON invites (event, member);

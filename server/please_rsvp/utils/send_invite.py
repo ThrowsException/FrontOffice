@@ -3,8 +3,8 @@ import aiohttp
 import smtplib
 
 REPLY_URL = """
-    <a href="http://localhost:8080/invites/{code}?r=no">For No</a>
-    <a href="http://localhost:8080/invites/{code}?r=yes"> For Yes</a>
+    <a href="http://localhost:8000/api/invites/{code}?r=no">For No</a>
+    <a href="http://localhost:8000/api/invites/{code}?r=yes"> For Yes</a>
     """
 
 
