@@ -2,21 +2,13 @@ import os
 import aiohttp
 import smtplib
 
-REPLY_URL = """
-    <a href="http://localhost:8000/api/invites/{code}?r=no">For No</a>
-    <a href="http://localhost:8000/api/invites/{code}?r=yes"> For Yes</a>
-    """
-
-if os.getenv("EMAIL_API_KEY"):
-    REPLY_URL = """
-    <a href="https://frontoffice.app/api/invites/{code}?r=no">For No</a>
-    <a href="https://frontoffice.app/api/invites/{code}?r=yes"> For Yes</a>
-    """
-
 
 async def send_invites(invites):
     if os.getenv("EMAIL_API_KEY", None):
-
+        REPLY_URL = """
+            <a href="https://frontoffice.app/api/invites/{code}?r=no">For No</a>
+            <a href="https://frontoffice.app/api/invites/{code}?r=yes"> For Yes</a>
+            """
         personalizations = []
         for invite in invites:
             personalizations.append(
@@ -44,6 +36,10 @@ async def send_invites(invites):
                 return resp.status
 
     else:
+        REPLY_URL = """
+            <a href="http://localhost:8000/api/invites/{code}?r=no">For No</a>
+            <a href="http://localhost:8000/api/invites/{code}?r=yes"> For Yes</a>
+            """
         for invite in invites:
             content = REPLY_URL.format(code=invite["code"])
             port = os.getenv("SMTP_PORT", 0)
