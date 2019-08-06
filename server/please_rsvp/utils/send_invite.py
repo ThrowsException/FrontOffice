@@ -8,7 +8,7 @@ REPLY_URL = """
     """
 
 if os.getenv("EMAIL_API_KEY"):
-    """
+    REPLY_URL = """
     <a href="https://frontoffice.app/api/invites/{code}?r=no">For No</a>
     <a href="https://frontoffice.app/api/invites/{code}?r=yes"> For Yes</a>
     """
