@@ -1,8 +1,9 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { startOfToday, format } from "date-fns";
 import { Formik } from "formik";
-import Button from "../components/Button";
-import Input from "../components/Input";
+import Button from "./Button";
+import Input from "./Input";
 
 const EventForm = ({ submit }) => {
   return (
@@ -38,7 +39,7 @@ const EventForm = ({ submit }) => {
             type="date"
             name="date"
             min={format(new Date(), "yyyy-MM-dd")}
-            max={"2050-01-01"}
+            max="2050-01-01"
             value={values.date}
             onChange={handleChange}
             onBlur={handleBlur}
@@ -63,8 +64,8 @@ const EventForm = ({ submit }) => {
               value={values.minute}
             >
               {[...Array(60).keys()].map(i => (
-                <option key={i} value={("00" + i).substr(-2, 2)}>
-                  {("00" + i).substr(-2, 2)}
+                <option key={i} value={`00${i}`.substr(-2, 2)}>
+                  {`00${i}`.substr(-2, 2)}
                 </option>
               ))}
             </select>
@@ -83,6 +84,10 @@ const EventForm = ({ submit }) => {
       )}
     </Formik>
   );
+};
+
+EventForm.propTypes = {
+  submit: PropTypes.func.isRequired
 };
 
 export default EventForm;

@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
-import w from "../utils/w";
+import React, { useEffect, useState } from "react";
 import { TeamForm, TeamList } from "../components";
 import Button from "../components/Button";
 import Layout from "../layout/Layout";
+import w from "../utils/w";
 
 const Teams = props => {
   const [teams, setTeams] = useState([]);
   const [formVisible, setFormVisible] = useState(false);
 
   const postData = async (url, body) => {
-    return await w
+    await w
       .url(url)
       .post({ ...body })
       .json();
@@ -21,12 +21,11 @@ const Teams = props => {
       .get()
       .json(json => {
         callback(json);
-      })
-      .catch(error => console.log(error));
+      });
   };
 
   const onDelete = async id => {
-    setTeams(teams.filter(item => item.id != id));
+    setTeams(teams.filter(item => item.id !== id));
     await w(`/api/teams/${id}`).delete();
   };
 
@@ -45,7 +44,7 @@ const Teams = props => {
   return (
     <Layout {...props}>
       <TeamList items={teams} onDelete={onDelete} />
-      <Button onClick={() => setFormVisible(!!!formVisible)}>+ Add Team</Button>
+      <Button onClick={() => setFormVisible(!!formVisible)}>+ Add Team</Button>
       {formVisible && <TeamForm submit={createTeam} />}
     </Layout>
   );

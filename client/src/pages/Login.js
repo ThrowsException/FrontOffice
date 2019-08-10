@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
-import w from "../utils/w";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Formik } from "formik";
 import Button from "../components/Button";
+import w from "../utils/w";
 
 const Container = styled.div`
   display: flex;
@@ -94,6 +95,12 @@ const Login = ({ history }) => {
       )}
     </Formik>
   );
+};
+
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func
+  }).isRequired
 };
 
 export default Login;

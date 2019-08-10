@@ -1,27 +1,23 @@
-import React, { useState, useEffect } from "react";
-import w from "../utils/w";
-import { EventList, EventForm } from "../components";
 import { format, parseISO } from "date-fns";
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
+import { EventList, EventForm } from "../components";
 import Layout from "../layout/Layout";
+import w from "../utils/w";
 
 const TeamName = styled.h1`
   font-size: 4em;
 `;
 
 const TeamDetails = props => {
-  let { match } = props;
+  const { match } = props;
   const [team, setTeam] = useState([{ name: "Loading..." }]);
 
   const [events, setEvents] = useState([]);
 
-  useEffect(() => {
-    fetchData(`/api/teams/${match.params.id}`, setTeam);
-    fetchData(`/api/teams/${match.params.id}/events`, setEvents);
-  }, []);
-
   const postData = async (url, body) => {
-    return await w
+    await w
       .url(url)
       .post({ ...body })
       .json();
@@ -33,14 +29,18 @@ const TeamDetails = props => {
       .get()
       .json(json => {
         callback(json);
-      })
-      .catch(error => console.log(error));
+      });
   };
 
+  useEffect(() => {
+    fetchData(`/api/teams/${match.params.id}`, setTeam);
+    fetchData(`/api/teams/${match.params.id}/events`, setEvents);
+  }, []);
+
   const createEvent = async ({ name, date, hour, minute, period }) => {
-    hour = period === "PM" ? parseInt(hour) + 12 : hour;
-    let l = parseISO(
-      `${date} ${("00" + hour).substr(-2, 2)}:${("00" + minute).substr(-2, 2)}`,
+    const h = period === "PM" ? parseInt(hour, 10) + 12 : hour;
+    const l = parseISO(
+      `${date} ${`00${h}`.substr(-2, 2)}:${`00${minute}`.substr(-2, 2)}`,
       "P p",
       new Date()
     );
@@ -60,6 +60,14 @@ const TeamDetails = props => {
       <EventForm submit={createEvent} />
     </Layout>
   );
+};
+
+TeamDetails.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.node
+    }).isRequired
+  }).isRequired
 };
 
 export default TeamDetails;

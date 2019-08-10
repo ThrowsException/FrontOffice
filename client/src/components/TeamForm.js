@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import Button from "./Button";
 
@@ -44,6 +45,10 @@ const TeamForm = ({ submit }) => {
       </Button>
     </>
   );
+};
+
+TeamForm.propTypes = {
+  submit: PropTypes.func.isRequired
 };
 
 export default TeamForm;

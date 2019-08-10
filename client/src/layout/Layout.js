@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Composition } from "atomic-layout";
 import { Link } from "react-router-dom";
@@ -34,7 +35,7 @@ const Container = styled.div`
 `;
 
 const Layout = props => {
-  let { match } = props;
+  const { match } = props;
   return (
     <Composition
       height="100vh"
@@ -50,7 +51,7 @@ const Layout = props => {
             </NavBar>
           </Header>
           <Aside style={{ background: "#0F0F0F0f" }}>
-            <Link to={`/teams`}>
+            <Link to="/teams">
               <h3>Home</h3>
             </Link>
             {match.params.id && (
@@ -73,6 +74,22 @@ const Layout = props => {
       )}
     </Composition>
   );
+};
+
+Layout.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.node
+    }).isRequired
+  }).isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ])
+};
+
+Layout.defaultProps = {
+  children: []
 };
 
 export default Layout;

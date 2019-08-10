@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Formik } from "formik";
 import Button from "./Button";
@@ -12,7 +13,7 @@ const StyledForm = styled.form`
 `;
 
 const validate = values => {
-  let errors = {};
+  const errors = {};
 
   if (!values.email) {
     errors.email = "Required";
@@ -80,6 +81,10 @@ const PlayerForm = ({ submit }) => {
       )}
     </Formik>
   );
+};
+
+PlayerForm.propTypes = {
+  submit: PropTypes.func.isRequired
 };
 
 export default PlayerForm;

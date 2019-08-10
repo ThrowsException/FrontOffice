@@ -49,7 +49,7 @@ const EventList = ({ events }) => {
     <>
       {events.length > 0 ? (
         <Events animate="visible" initial="hidden" variants={list}>
-          {events.map((event, i) => (
+          {events.map(event => (
             <Event key={event.id} variants={items}>
               <EventDetails>
                 <EventTitle>
@@ -72,7 +72,13 @@ const EventList = ({ events }) => {
 };
 
 EventList.propTypes = {
-  events: PropTypes.array
+  events: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      team: PropTypes.number,
+      name: PropTypes.string
+    })
+  )
 };
 
 EventList.defaultProps = {

@@ -1,8 +1,8 @@
 import React from "react";
 import { Composition } from "atomic-layout";
 import { motion } from "framer-motion";
-import { Link as LinkTo } from "react-router-dom";
-import { NavBar, NavTitle, Root, Title, Link, SubTitle } from "./styles";
+import { Link } from "react-router-dom";
+import { NavBar, NavTitle, Root, Title, SubTitle } from "./styles";
 
 const areas = `
  header
@@ -24,10 +24,7 @@ export default () => (
         <Header>
           <NavBar>
             <NavTitle>Front Office</NavTitle>
-            <Link>
-              <LinkTo to="login">Login</LinkTo>
-            </Link>
-            <Link>Sign Up *coming soon</Link>
+            <Link to="login">Login</Link>
           </NavBar>
         </Header>
         <Content>
