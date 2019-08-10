@@ -1,10 +1,9 @@
 import styled from "styled-components";
 
 export const NavBar = styled.div`
-display: flex;
-align-items center;
-justify-content: center;
-padding: 0 1em;
+  width: 100%;
+  display: flex;
+  align-items center;
 `;
 
 export const NavTitle = styled.h3`
@@ -12,12 +11,10 @@ export const NavTitle = styled.h3`
 `;
 
 export const Title = styled.h1`
-  text-align: center;
   font-size: 4em;
-  margin-bottom: 0;
+  margin 0;
 `;
 export const SubTitle = styled.h2`
-  text-align: center;
   font-size: 2em;
   padding: 0;
   margin: 0;
@@ -31,5 +28,10 @@ export const Root = styled.div`
   display: flex;
   place-items: center;
   place-content: center;
-  flex-flow: column wrap;
+`;
+
+export const HeaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  place-content: center;
 `;

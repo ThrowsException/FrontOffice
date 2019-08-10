@@ -2,12 +2,18 @@ import React from "react";
 import { Composition } from "atomic-layout";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { NavBar, NavTitle, Root, Title, SubTitle } from "./styles";
+import {
+  NavBar,
+  NavTitle,
+  Root,
+  Title,
+  SubTitle,
+  HeaderContainer
+} from "./styles";
 
 const areas = `
  header
  content
- footer
 `;
 
 const variants = {
@@ -22,60 +28,107 @@ export default () => (
     {({ Header, Content }) => (
       <>
         <Header>
-          <NavBar>
-            <NavTitle>Front Office</NavTitle>
-            <Link to="login">Login</Link>
-          </NavBar>
+          <HeaderContainer>
+            <div style={{ width: "1040px" }}>
+              <NavBar>
+                <NavTitle>Front Office</NavTitle>
+                <Link to="login">Login</Link>
+              </NavBar>
+            </div>
+          </HeaderContainer>
         </Header>
         <Content>
-          <MotionRoot
-            variants={variants}
-            initial="hidden"
-            animate="visible"
-            transition={{ duration: 2 }}
-          >
-            <Title>Front Office</Title>
-            <SubTitle>Your GM Dashboard</SubTitle>
-            <div>
-              <div
+          <header style={{ position: "relative" }}>
+            <div
+              style={{
+                position: "absolute",
+                backgroundColor: "#ee9617",
+                background: "linear-gradient(315deg, #ee9617 0%, #fe5858 74%)",
+                height: "100%",
+                width: "100%"
+              }}
+            ></div>
+            <div
+              style={{
+                display: "flex",
+                alignContent: "center",
+                justifyItems: "center"
+              }}
+            >
+              <section
                 style={{
-                  margin: "8px 0",
-                  background: "#0000000a",
-                  padding: "8px"
+                  height: "500px",
+                  position: "relative",
+                  flex: 1,
+                  display: "flex",
+                  placeContent: "center",
+                  flexDirection: "column"
                 }}
               >
-                <h2>Features</h2>
-                <ul>
-                  <li>Manage Multiple Teams</li>
-                  <li>Completely Email Based</li>
-                  <ul>
-                    <li>
-                      Players only need an email for game reminders and checking
-                      in meaning no more forgotten password and apps to install.
-                      Simply send an email and get a reply!
-                    </li>
-                  </ul>
-                  <li>
-                    Manage notes like who has refreshments, equipment, etc
-                  </li>
-                </ul>
-              </div>
+                <Title>Front Office</Title>
+                <SubTitle>Your GM Dashboard</SubTitle>
+                <div style={{ color: "#fff" }}>
+                  <p>
+                    The easiest way to manage your team through email and text.
+                    Let's get started
+                  </p>
+                </div>
+              </section>
               <div
                 style={{
-                  margin: "8px 0",
-                  background: "#0000000a",
-                  padding: "8px"
+                  flex: 1,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  position: "relative",
+                  flexDirection: "column"
                 }}
               >
-                <h2>Coming...</h2>
-                <ul>
-                  <li>Alerts when players checkout</li>
-                  <li>Scheduled Game Reminders</li>
-                  <li>Text reminders</li>
-                </ul>
+                <div
+                  style={{
+                    display: "flex",
+                    margin: "1rem",
+                    height: "100%",
+                    borderRadius: "20px",
+                    background: "#ffffff1a",
+                    boxShadow:
+                      "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"
+                  }}
+                >
+                  <MotionRoot
+                    variants={variants}
+                    initial="hidden"
+                    animate="visible"
+                    transition={{ duration: 2 }}
+                  >
+                    <div
+                      style={{
+                        fontSize: "1.25em",
+                        display: "flex",
+                        justifyContent: "center",
+                        placeContent: "center",
+                        alignContent: "center"
+                      }}
+                    >
+                      <ul style={{ listStyle: "none", flex: 1 }}>
+                        <li style={{ margin: "10px" }}>
+                          Scheduled Game Reminders. Send as many as you like
+                        </li>
+                        <li style={{ margin: "10px" }}>
+                          Email and Text Notifications
+                        </li>
+                        <li style={{ margin: "10px" }}>
+                          Manage Multiple Teams
+                        </li>
+                        <li style={{ margin: "10px" }}>
+                          Recieve notifications when players checkout
+                        </li>
+                      </ul>
+                    </div>
+                  </MotionRoot>
+                </div>
               </div>
             </div>
-          </MotionRoot>
+          </header>
         </Content>
       </>
     )}
