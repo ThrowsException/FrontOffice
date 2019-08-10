@@ -64,6 +64,7 @@ export default () => (
                 style={{
                   flex: 1,
                   display: "flex",
+                  padding: "8px",
                   justifyContent: "space-between",
                   position: "relative",
                   flexDirection: "column"
@@ -72,7 +73,6 @@ export default () => (
                 <div
                   style={{
                     display: "flex",
-                    margin: "1rem",
                     height: "100%",
                     borderRadius: "20px",
                     background: "#ffffff1a",
@@ -96,17 +96,17 @@ export default () => (
                       }}
                     >
                       <ul style={{ listStyle: "none", flex: 1 }}>
-                        <li style={{ margin: "10px" }}>
+                        <li style={{ margin: "16px 0" }}>
                           Scheduled Game Reminders. Send as many as you like
                         </li>
-                        <li style={{ margin: "10px" }}>
+                        <li style={{ margin: "16px 0" }}>
                           Email and Text Notifications
                         </li>
-                        <li style={{ margin: "10px" }}>
+                        <li style={{ margin: "16px 0" }}>
                           Manage Multiple Teams
                         </li>
-                        <li style={{ margin: "10px" }}>
-                          Recieve notifications when players checkout
+                        <li style={{ margin: "16px 0" }}>
+                          Receive notifications when players checkout
                         </li>
                       </ul>
                     </div>
