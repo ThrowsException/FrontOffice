@@ -1,11 +1,5 @@
 import styled from "styled-components";
 
-export const NavBar = styled.div`
-  width: 100%;
-  display: flex;
-  align-items center;
-`;
-
 export const NavTitle = styled.h3`
   flex: 1;
 `;
@@ -30,8 +24,9 @@ export const Root = styled.div`
   place-content: center;
 `;
 
-export const HeaderContainer = styled.div`
+export const NavBar = styled.div`
   display: flex;
+  max-width: 960px;
   align-items: center;
-  place-content: center;
+  margin: 0 auto;
 `;

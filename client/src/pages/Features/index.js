@@ -2,14 +2,7 @@ import React from "react";
 import { Composition } from "atomic-layout";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import {
-  NavBar,
-  NavTitle,
-  Root,
-  Title,
-  SubTitle,
-  HeaderContainer
-} from "./styles";
+import { NavBar, NavTitle, Root, Title, SubTitle } from "./styles";
 
 const areas = `
  header
@@ -28,14 +21,10 @@ export default () => (
     {({ Header, Content }) => (
       <>
         <Header>
-          <HeaderContainer>
-            <div style={{ width: "1040px" }}>
-              <NavBar>
-                <NavTitle>Front Office</NavTitle>
-                <Link to="login">Login</Link>
-              </NavBar>
-            </div>
-          </HeaderContainer>
+          <NavBar>
+            <NavTitle>Front Office</NavTitle>
+            <Link to="login">Login</Link>
+          </NavBar>
         </Header>
         <Content>
           <header style={{ position: "relative" }}>
@@ -68,10 +57,7 @@ export default () => (
                 <Title>Front Office</Title>
                 <SubTitle>Your GM Dashboard</SubTitle>
                 <div style={{ color: "#fff" }}>
-                  <p>
-                    The easiest way to manage your team through email and text.
-                    Let's get started
-                  </p>
+                  <p>The easiest way to manage your team.</p>
                 </div>
               </section>
               <div
