@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import wretch from "wretch";
+import w from "../utils/w";
 import styled from "styled-components";
 import { Formik } from "formik";
 import Button from "../components/Button";
@@ -37,7 +37,8 @@ const Login = ({ history }) => {
   });
 
   const submit = async (values, { setSubmitting, setErrors }) => {
-    await wretch("/api/login")
+    await w
+      .url("/api/login")
       .post({ username: values.email, password: values.password })
       .json(() => {
         document.cookie = "logged_in=1";

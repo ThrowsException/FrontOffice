@@ -1,45 +1,23 @@
 import React, { useState, useEffect } from "react";
-import wretch from "wretch";
+import w from "../utils/w";
 import { TeamForm, TeamList } from "../components";
-import { Composition } from "atomic-layout";
-import styled from "styled-components";
 import Button from "../components/Button";
+import Layout from "../layout/Layout";
 
-const areas = `
-  header
-  content
-`;
-
-const NavBar = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 1em;
-  background: #1B1B1E
-  color: white;
-`;
-
-const NavTitle = styled.h4`
-  flex: 1;
-`;
-
-const Root = styled.div`
-  height: 100vh;
-  max-width: 960px;
-`;
-
-const Teams = () => {
+const Teams = props => {
   const [teams, setTeams] = useState([]);
   const [formVisible, setFormVisible] = useState(false);
 
   const postData = async (url, body) => {
-    return await wretch(url)
+    return await w
+      .url(url)
       .post({ ...body })
       .json();
   };
 
   const fetchData = async (url, callback) => {
-    await wretch(url)
+    await w
+      .url(url)
       .get()
       .json(json => {
         callback(json);
@@ -49,7 +27,7 @@ const Teams = () => {
 
   const onDelete = async id => {
     setTeams(teams.filter(item => item.id != id));
-    await wretch(`/api/teams/${id}`).delete();
+    await w(`/api/teams/${id}`).delete();
   };
 
   useEffect(() => {
@@ -65,26 +43,11 @@ const Teams = () => {
   };
 
   return (
-    <Composition areas={areas}>
-      {({ Header, Content }) => (
-        <>
-          <Header>
-            <NavBar>
-              <NavTitle>Front Office</NavTitle>
-            </NavBar>
-          </Header>
-          <Content>
-            <Root>
-              <TeamList items={teams} onDelete={onDelete} />
-              <Button onClick={() => setFormVisible(!!!formVisible)}>
-                + Add Team
-              </Button>
-              {formVisible && <TeamForm submit={createTeam} />}
-            </Root>
-          </Content>
-        </>
-      )}
-    </Composition>
+    <Layout {...props}>
+      <TeamList items={teams} onDelete={onDelete} />
+      <Button onClick={() => setFormVisible(!!!formVisible)}>+ Add Team</Button>
+      {formVisible && <TeamForm submit={createTeam} />}
+    </Layout>
   );
 };
 
