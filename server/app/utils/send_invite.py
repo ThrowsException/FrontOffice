@@ -3,7 +3,7 @@ import aiohttp
 import smtplib
 
 
-async def send_invites(invites):
+async def send_invites(invites, event):
     if os.getenv("EMAIL_API_KEY", None):
         REPLY_URL = """
             <a href="https://frontoffice.app/api/invites/{code}?r=no">For No</a>
@@ -37,11 +37,15 @@ async def send_invites(invites):
 
     else:
         REPLY_URL = """
+            {refreshments}
             <a href="http://localhost:8000/api/invites/{code}?r=no">For No</a>
             <a href="http://localhost:8000/api/invites/{code}?r=yes"> For Yes</a>
             """
         for invite in invites:
-            content = REPLY_URL.format(code=invite["code"])
+            refreshments = ""
+            if event[4] == invite["member"]:
+                refreshments = "YOU ARE BRINGING BEER"
+            content = REPLY_URL.format(code=invite["code"], refreshments=refreshments)
             port = os.getenv("SMTP_PORT", 0)
             host = os.getenv("SMTP_HOST", "smtp")
             with smtplib.SMTP(host, port=port) as smtp:

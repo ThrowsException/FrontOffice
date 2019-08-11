@@ -50,6 +50,18 @@ class InviteView(web.View):
             async with conn.cursor() as cur:
                 sql = dedent(
                     """
+                    SELECT *
+                    FROM events
+                    WHERE id = '{}'
+                """.format(
+                        event_id
+                    )
+                )
+                await cur.execute(sql)
+                event = await cur.fetchone()
+
+                sql = dedent(
+                    """
                     SELECT e.id, m.id, m.email, i.id, i.reply
                     FROM events e
                     JOIN members m USING (team)
@@ -78,11 +90,15 @@ class InviteView(web.View):
                     await cur.execute(sql)
                     result = await cur.fetchone()
                     if result:
-                        needs_invite.append({"email": record[2], "code": result[0]})
+                        needs_invite.append(
+                            {"email": record[2], "code": result[0], "member": record[1]}
+                        )
                     else:
                         # doesn't need a new entry but hasn't replied
-                        needs_invite.append({"email": record[2], "code": record[3]})
+                        needs_invite.append(
+                            {"email": record[2], "code": record[3], "member": record[1]}
+                        )
 
-                await send_invites(needs_invite)
+                await send_invites(needs_invite, event)
 
         return web.json_response({"status": "Invites sent"})
