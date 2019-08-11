@@ -5,12 +5,15 @@ import { Formik } from "formik";
 import Button from "./Button";
 import Input from "./Input";
 
-const EventForm = ({ submit }) => {
+const EventForm = ({ submit, players }) => {
+  console.log(players);
   return (
     <Formik
+      enableReinitialize
       initialValues={{
         date: format(startOfToday(), "yyyy-MM-dd"),
         name: "",
+        refreshments: players.length > 0 ? players[0].id : "",
         hour: 1,
         minute: 0,
         period: "PM"
@@ -34,6 +37,18 @@ const EventForm = ({ submit }) => {
             onChange={handleChange}
             value={values.name}
           />
+          <select
+            name="refreshments"
+            onChange={handleChange}
+            value={values.refreshments}
+            onBlur={handleBlur}
+          >
+            {players.map(i => (
+              <option key={i.id} value={i.id}>
+                {i.name}
+              </option>
+            ))}
+          </select>
           <Input
             required
             type="date"
@@ -87,7 +102,17 @@ const EventForm = ({ submit }) => {
 };
 
 EventForm.propTypes = {
-  submit: PropTypes.func.isRequired
+  submit: PropTypes.func.isRequired,
+  players: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.name
+    })
+  )
+};
+
+EventForm.defaultProps = {
+  players: []
 };
 
 export default EventForm;

@@ -13,8 +13,8 @@ const TeamName = styled.h1`
 const TeamDetails = props => {
   const { match } = props;
   const [team, setTeam] = useState([{ name: "Loading..." }]);
-
   const [events, setEvents] = useState([]);
+  const [members, setMembers] = useState([]);
 
   const postData = async (url, body) => {
     return w
@@ -35,9 +35,17 @@ const TeamDetails = props => {
   useEffect(() => {
     fetchData(`/api/teams/${match.params.id}`, setTeam);
     fetchData(`/api/teams/${match.params.id}/events`, setEvents);
+    fetchData(`/api/teams/${match.params.id}/members`, setMembers);
   }, []);
 
-  const createEvent = async ({ name, date, hour, minute, period }) => {
+  const createEvent = async ({
+    name,
+    date,
+    hour,
+    minute,
+    period,
+    refreshments
+  }) => {
     const h = period === "PM" ? parseInt(hour, 10) + 12 : hour;
     const l = parseISO(
       `${date} ${`00${h}`.substr(-2, 2)}:${`00${minute}`.substr(-2, 2)}`,
@@ -47,7 +55,8 @@ const TeamDetails = props => {
     const event = await postData("/api/events", {
       name,
       date: format(l, "yyyy-MM-dd HH:mm:ssxxxxx"),
-      team: match.params.id
+      team: match.params.id,
+      refreshments
     });
     setEvents([...events, event]);
   };
@@ -57,7 +66,7 @@ const TeamDetails = props => {
       <TeamName>{team[0].name}</TeamName>
       <h2>Upcoming Events</h2>
       <EventList events={events} />
-      <EventForm submit={createEvent} />
+      <EventForm submit={createEvent} players={members} />
     </Layout>
   );
 };

@@ -53,6 +53,7 @@ const Event = props => {
                 {e.name}
                 {e.email}
                 <EventReply reply={e.reply}>{reply}</EventReply>
+                {e.id === event.refreshments ? "Refreshments" : ""}
               </li>
             );
           })}

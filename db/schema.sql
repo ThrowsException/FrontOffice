@@ -15,7 +15,8 @@ CREATE TABLE events (
   id bigserial PRIMARY KEY,
   name text,
   date timestamp with time zone NOT NULL DEFAULT NOW(),
-  team bigint REFERENCES teams NOT NULL
+  team bigint REFERENCES teams NOT NULL,
+  refreshments bigint REFERENCES members
 );
 
 CREATE TABLE invites (

@@ -47,7 +47,7 @@ class EventView(web.View):
         await check_authorized(self.request)
         event_id = self.request.match_info.get("id")
 
-        sql = """SELECT e.id, e.name, e.date, e.team
+        sql = """SELECT e.id, e.name, e.date, e.team, e.refreshments
         FROM events e
         """
         if event_id:
@@ -71,6 +71,7 @@ class EventView(web.View):
                         "name": result[1],
                         "date": arrow.Arrow.fromdatetime(result[2]).format(),
                         "team": result[3],
+                        "refreshments": result[4],
                         "members": [],
                     }
 
@@ -101,10 +102,10 @@ class EventView(web.View):
                 body = await self.request.json()
                 sql = dedent(
                     """
-                    INSERT INTO events (name, date, team)
-                    VALUES ('{}', '{}', '{}') RETURNING id
+                    INSERT INTO events (name, date, team, refreshments)
+                    VALUES ('{}', '{}', '{}', '{}') RETURNING id
                 """.format(
-                        body["name"], body["date"], body["team"]
+                        body["name"], body["date"], body["team"], body["refreshments"]
                     )
                 )
                 await cur.execute(sql)
