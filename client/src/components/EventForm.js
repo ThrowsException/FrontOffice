@@ -6,7 +6,6 @@ import Button from "./Button";
 import Input from "./Input";
 
 const EventForm = ({ submit, players }) => {
-  console.log(players);
   return (
     <Formik
       enableReinitialize
@@ -35,6 +34,7 @@ const EventForm = ({ submit, players }) => {
             name="name"
             placeholder="name"
             onChange={handleChange}
+            in
             value={values.name}
           />
           <select

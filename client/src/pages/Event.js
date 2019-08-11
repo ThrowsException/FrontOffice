@@ -30,7 +30,7 @@ const Event = props => {
     fetchData(`/api/events/${match.params.eventId}`, setEvent);
   }, {});
 
-  let refreshment = event.members.find(member => {
+  const refreshment = event.members.find(member => {
     return member.id === event.refreshments;
   });
 
@@ -40,14 +40,17 @@ const Event = props => {
     if (a.reply > b.reply) return -1;
 
     if (a.name.toUpperCase() > b.name.toUpperCase()) return 1;
-    else return -1;
+    return -1;
   });
 
   return (
     <Layout {...props}>
       <h1>{event.name}</h1>
       <h1>{format(new Date(event.date), "P p")}</h1>
-      <h3>Refreshments: {refreshment && refreshment.name}</h3>
+      <h3>
+        Refreshments:
+        {refreshment && refreshment.name}
+      </h3>
       <button
         variant="contained"
         color="primary"
@@ -63,13 +66,17 @@ const Event = props => {
             <th>Name</th>
             <th>Email</th>
             <th>Reply</th>
-            <th></th>
+            <th />
           </tr>
         </thead>
         <tbody>
           {sorted.map(e => {
-            let reply =
-              e.reply === null ? "Not Replied" : e.reply ? "In" : "Out";
+            let reply = "Not Replied";
+            if (e.reply) {
+              reply = "In";
+            } else if (e.reply === false) {
+              reply = "Out";
+            }
 
             return (
               <tr key={e.email}>
