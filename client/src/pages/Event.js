@@ -30,10 +30,24 @@ const Event = props => {
     fetchData(`/api/events/${match.params.eventId}`, setEvent);
   }, {});
 
+  let refreshment = event.members.find(member => {
+    return member.id === event.refreshments;
+  });
+
+  const sorted = event.members.sort((a, b) => {
+    if (a.reply === null) return 1;
+    if (a.reply < b.reply) return 1;
+    if (a.reply > b.reply) return -1;
+
+    if (a.name.toUpperCase() > b.name.toUpperCase()) return 1;
+    else return -1;
+  });
+
   return (
     <Layout {...props}>
       <h1>{event.name}</h1>
       <h1>{format(new Date(event.date), "P p")}</h1>
+      <h3>Refreshments: {refreshment && refreshment.name}</h3>
       <button
         variant="contained"
         color="primary"
@@ -42,22 +56,34 @@ const Event = props => {
       >
         Send Invites
       </button>
-      <ul>
-        {event.members &&
-          event.members.map(e => {
+
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Reply</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {sorted.map(e => {
             let reply =
               e.reply === null ? "Not Replied" : e.reply ? "In" : "Out";
 
             return (
-              <li key={e.email}>
-                {e.name}
-                {e.email}
-                <EventReply reply={e.reply}>{reply}</EventReply>
-                {e.id === event.refreshments && <b>Refreshments</b>}
-              </li>
+              <tr key={e.email}>
+                <td>{e.name}</td>
+                <td>{e.email}</td>
+                <td>
+                  <EventReply reply={e.reply}>{reply}</EventReply>
+                </td>
+                <td>{e.id === event.refreshments && <b>Refreshments</b>}</td>
+              </tr>
             );
           })}
-      </ul>
+        </tbody>
+      </table>
     </Layout>
   );
 };
