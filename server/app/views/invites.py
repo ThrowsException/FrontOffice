@@ -50,10 +50,11 @@ class InviteView(web.View):
             async with conn.cursor() as cur:
                 sql = dedent(
                     """
-                    SELECT e.id, m.id, m.email
+                    SELECT e.id, m.id, m.email, i.id, i.reply
                     FROM events e
                     JOIN members m USING (team)
-                    WHERE e.id = '{}'
+                    LEFT JOIN invites i ON m.id = i.member 
+                    WHERE e.id = '{}' and i.reply is null
                 """.format(
                         event_id
                     )
@@ -65,8 +66,8 @@ class InviteView(web.View):
                 for record in results:
                     sql = dedent(
                         """
-                        INSERT INTO invites (event, member, reply)
-                        VALUES ('{}', '{}', 'false') 
+                        INSERT INTO invites (event, member)
+                        VALUES ('{}', '{}') 
                         ON CONFLICT DO NOTHING
                         RETURNING id
                        
@@ -78,6 +79,9 @@ class InviteView(web.View):
                     result = await cur.fetchone()
                     if result:
                         needs_invite.append({"email": record[2], "code": result[0]})
+                    else:
+                        # doesn't need a new entry but hasn't replied
+                        needs_invite.append({"email": record[2], "code": record[3]})
 
                 await send_invites(needs_invite)
 

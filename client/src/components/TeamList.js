@@ -22,14 +22,17 @@ const StyledLink = styled(Link)`
 const TeamList = ({ items }) => {
   return (
     <>
-      {items.length === 0 && <h1> Nothing Here</h1>}
-      {items.map(item => (
-        <TeamCard key={item.id}>
-          <StyledLink to={`/teams/${item.id}`}>
-            <TeamName>{item.name}</TeamName>
-          </StyledLink>
-        </TeamCard>
-      ))}
+      {items.length === 0 ? (
+        <h1> Nothing Here</h1>
+      ) : (
+        items.map(item => (
+          <TeamCard key={item.id}>
+            <StyledLink to={`/teams/${item.id}`}>
+              <TeamName>{item.name}</TeamName>
+            </StyledLink>
+          </TeamCard>
+        ))
+      )}
     </>
   );
 };

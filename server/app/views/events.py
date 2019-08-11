@@ -99,7 +99,6 @@ class EventView(web.View):
             async with conn.cursor() as cur:
 
                 body = await self.request.json()
-                print(body["date"])
                 sql = dedent(
                     """
                     INSERT INTO events (name, date, team)

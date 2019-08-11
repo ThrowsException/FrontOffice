@@ -44,13 +44,18 @@ const Event = props => {
       </button>
       <ul>
         {event.members &&
-          event.members.map(e => (
-            <li key={e.email}>
-              {e.name}
-              {e.email}
-              <EventReply reply={e.reply}>{e.reply ? "In" : "Out"}</EventReply>
-            </li>
-          ))}
+          event.members.map(e => {
+            let reply =
+              e.reply === null ? "Not Replied" : e.reply ? "In" : "Out";
+
+            return (
+              <li key={e.email}>
+                {e.name}
+                {e.email}
+                <EventReply reply={e.reply}>{reply}</EventReply>
+              </li>
+            );
+          })}
       </ul>
     </Layout>
   );

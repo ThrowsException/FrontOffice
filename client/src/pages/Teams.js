@@ -9,7 +9,7 @@ const Teams = props => {
   const [formVisible, setFormVisible] = useState(false);
 
   const postData = async (url, body) => {
-    await w
+    return w
       .url(url)
       .post({ ...body })
       .json();
@@ -44,7 +44,7 @@ const Teams = props => {
   return (
     <Layout {...props}>
       <TeamList items={teams} onDelete={onDelete} />
-      <Button onClick={() => setFormVisible(!!formVisible)}>+ Add Team</Button>
+      <Button onClick={() => setFormVisible(!formVisible)}>+ Add Team</Button>
       {formVisible && <TeamForm submit={createTeam} />}
     </Layout>
   );

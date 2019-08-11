@@ -17,7 +17,7 @@ const TeamDetails = props => {
   const [events, setEvents] = useState([]);
 
   const postData = async (url, body) => {
-    await w
+    return w
       .url(url)
       .post({ ...body })
       .json();
