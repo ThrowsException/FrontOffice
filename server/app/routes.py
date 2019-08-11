@@ -7,8 +7,8 @@ from aiohttp_security import (
     check_authorized,
 )
 
-from please_rsvp.db_auth import check_credentials, get_user
-from please_rsvp.views import events, invites, members, teams
+from app.db_auth import check_credentials, get_user
+from app.views import events, invites, members, teams
 
 
 async def status(request):

@@ -5,7 +5,7 @@ from aiohttp_security import check_authorized
 
 from aiohttp import web
 
-from please_rsvp.utils.send_invite import send_invites
+from app.utils.send_invite import send_invites
 
 
 class InviteView(web.View):

@@ -1,6 +1,6 @@
 import pytest
 
-from please_rsvp.app import make_app
+from app.app import make_app
 
 
 @pytest.fixture

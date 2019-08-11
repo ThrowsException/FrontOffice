@@ -11,8 +11,8 @@ from aiohttp import web
 import aiopg  # type: ignore
 import psycopg2
 
-from please_rsvp.routes import setup_routes
-from please_rsvp.db_auth import DBAuthorizationPolicy
+from app.routes import setup_routes
+from app.db_auth import DBAuthorizationPolicy
 
 logger = logging.getLogger(__name__)
 

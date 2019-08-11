@@ -1,14 +1,10 @@
-# Please RSVP
+# Front Office
 
-proof of concept for an idea for RSVP'ing to things via email.
-Inspired by a number of things for my hockey teams
-
-- No one wants to download another god damn app. Everyone already has email/text just use that
-- Every app sucks. They're either slow, filled with ads, or unintuitive
-
-The idea is an system where you can rsvp with yes or no to an event entirely through a link. No login is required for those who the rsvp is being sent.
+Manage team invites through text and email
 
 ## Development
+
+### Server
 
 Requires docker and python>=3.7
 
@@ -25,7 +21,17 @@ boostrap docker containers, environment variables and start the app
 
 ```bash
 ./startup && source ./build/test_env
-adev runserver --app-factory make_app server/please_rsvp/app.py
+adev runserver --app-factory make_app server/app/app.py
+```
+
+### Client
+
+node 12+
+
+```bash
+cd client
+npm i
+npm start
 ```
 
 ### POST /teams

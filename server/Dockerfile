@@ -9,7 +9,7 @@ RUN pip install -r /tmp/requires/install.txt && \
   python setup.py bdist && python setup.py install && \
   apk del .build-deps
 
-ENTRYPOINT ["please-rsvp"]
+ENTRYPOINT ["front-office"]
 
 HEALTHCHECK --interval=10s --timeout=3s \
   CMD python /tmp/healthcheck.py

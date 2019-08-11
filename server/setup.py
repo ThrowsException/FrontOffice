@@ -9,12 +9,12 @@ def read_requires():
 
 
 setup(
-    name="please_rsvp",
+    name="Front Office",
     version="0.0.3",
-    description="My App",
+    description="Front Office Server",
     packages=find_packages(),
     include_package_data=True,
     install_requires=read_requires(),
     zip_safe=False,
-    entry_points={"console_scripts": ["please-rsvp=please_rsvp.__main__"]},
+    entry_points={"console_scripts": ["front-office=app.__main__"]},
 )

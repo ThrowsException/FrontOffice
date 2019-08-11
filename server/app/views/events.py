@@ -9,7 +9,7 @@ import arrow
 from aiohttp_security import check_authorized
 import aiohttp
 from aiohttp import web
-from please_rsvp.utils.send_invite import send_invites
+from app.utils.send_invite import send_invites
 
 
 def myconverter(o):
