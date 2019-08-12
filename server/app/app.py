@@ -1,20 +1,25 @@
 from concurrent.futures import TimeoutError
 import logging
 import os
+import urllib.request
+import json
 
-from aiohttp_session import setup as setup_session
-from aiohttp_session.redis_storage import RedisStorage
-from aiohttp_security import setup as setup_security
-from aiohttp_security import SessionIdentityPolicy
-from aioredis import create_redis_pool, RedisError
 from aiohttp import web
 import aiopg  # type: ignore
+from aiohttp.web import middleware
 import psycopg2
 
 from app.routes import setup_routes
-from app.db_auth import DBAuthorizationPolicy
 
 logger = logging.getLogger(__name__)
+
+
+async def setup_cognito_keys(app):
+    keys_url = "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_I1wwaxDmP/.well-known/jwks.json"
+    response = urllib.request.urlopen(keys_url)
+    keys = json.loads(response.read())["keys"]
+    print(keys)
+    app["cognito_keys"] = keys
 
 
 async def create_aiopg(app: web.Application):
@@ -29,23 +34,12 @@ async def create_aiopg(app: web.Application):
     except psycopg2.Error as e:
         logger.error(e)
     app["db_pool"] = db
-    setup_security(app, SessionIdentityPolicy(), DBAuthorizationPolicy(db))
-
-
-async def create_session(app: web.Application):
-    HOST = os.getenv("REDIS_HOST", "redis")
-    PORT = os.getenv("REDIS_PORT", "6379")
-    try:
-        redis_pool = await create_redis_pool((HOST, PORT), timeout=5)
-        setup_session(app, RedisStorage(redis_pool))
-    except (RedisError, TimeoutError) as e:
-        logger.error(e)
 
 
 def make_app() -> web.Application:
     app = web.Application()
     app.on_startup.append(create_aiopg)
-    app.on_startup.append(create_session)
+    app.on_startup.append(setup_cognito_keys)
     setup_routes(app)
 
     return app

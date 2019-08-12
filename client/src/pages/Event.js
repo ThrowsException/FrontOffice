@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { format } from "date-fns";
 import styled from "styled-components";
 import Layout from "../layout/Layout";
-import w from "../utils/w";
+import w, { fetchData } from "../utils/w";
 
 const EventReply = styled.span`
   color: ${p => (p.reply ? "green" : "red")};
@@ -17,15 +17,6 @@ const Event = props => {
   const { match } = props;
   const [event, setEvent] = useState({ date: new Date(), members: [] });
   const [team, setTeam] = useState([{ name: "Loading..." }]);
-
-  const fetchData = async (url, callback) => {
-    await w
-      .url(url)
-      .get()
-      .json(json => {
-        callback(json);
-      });
-  };
 
   const sendInvites = async () => {
     await w.url("/api/invites").post({ event: event.id });

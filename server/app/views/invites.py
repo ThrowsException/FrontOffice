@@ -1,10 +1,10 @@
 import os
 import smtplib
-from aiohttp_security import check_authorized
 
 from aiohttp import web
 
 from app.utils.send_invite import send_invites
+from ..utils.authorize import authorize
 
 
 class InviteView(web.View):
@@ -37,7 +37,7 @@ class InviteView(web.View):
                     return web.Response(text="I didn't find that")
 
     async def post(self):
-        await check_authorized(self.request)
+        authorize(self.request)
         body = await self.request.json()
         event_id = body["event"]
 

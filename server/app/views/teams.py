@@ -1,11 +1,12 @@
 from aiohttp import web
-from aiohttp_security import check_authorized, authorized_userid
+import jwt
+from ..utils.authorize import authorize
 
 
 class TeamView(web.View):
     async def get(self):
-        await check_authorized(self.request)
-        user_id = await authorized_userid(self.request)
+        authorize(self.request)
+        user_id = self.request["user_id"]
         team_id = self.request.match_info.get("id")
 
         sql = """
@@ -30,8 +31,9 @@ class TeamView(web.View):
         return web.json_response(items)
 
     async def post(self):
-        await check_authorized(self.request)
-        user_id = await authorized_userid(self.request)
+        authorize(self.request)
+        user_id = self.request["user_id"]
+        team_id = self.request.match_info.get("id")
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
                 body = await self.request.json()
@@ -50,7 +52,8 @@ class TeamView(web.View):
                 return web.json_response({"id": result[0], "name": body["name"]})
 
     async def delete(self):
-        await check_authorized(self.request)
+        authorize(self.request)
+        user_id = self.request["user_id"]
         team_id = self.request.match_info.get("id")
 
         async with self.request.app["db_pool"].acquire() as conn:

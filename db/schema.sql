@@ -28,7 +28,7 @@ CREATE TABLE invites (
 
 CREATE TABLE owners (
   team bigint REFERENCES teams NOT NULL,
-  owner integer NOT NULL
+  owner UUID NOT NULL
 );
 
 CREATE UNIQUE INDEX team_member ON members (email, team);

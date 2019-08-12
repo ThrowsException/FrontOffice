@@ -16,7 +16,7 @@ mkdir build
 
 docker-compose down --remove-orphans
 docker-compose pull --ignore-pull-failures
-docker-compose up -d db adminer smtp redis
+docker-compose up -d db adminer smtp
 
 echo "Waiting for db"
 be_healthy $(docker-compose ps -q db)
@@ -31,6 +31,4 @@ cat << EOF > ./build/test_env
   export POSTGRES_PORT=$(get_docker_port db 5432)
   export SMTP_HOST=localhost
   export SMTP_PORT=$(get_docker_port smtp 1025)
-  export REDIS_HOST=localhost
-  export REDIS_PORT=$(get_docker_port redis 6379)
 EOF

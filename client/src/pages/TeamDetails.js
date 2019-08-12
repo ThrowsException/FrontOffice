@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { EventList, EventForm } from "../components";
 import Layout from "../layout/Layout";
-import w from "../utils/w";
+import w, { postData, fetchData } from "../utils/w";
 
 const TeamName = styled.h1`
   font-size: 4em;
@@ -15,22 +15,6 @@ const TeamDetails = props => {
   const [team, setTeam] = useState([{ name: "Loading..." }]);
   const [events, setEvents] = useState([]);
   const [members, setMembers] = useState([]);
-
-  const postData = async (url, body) => {
-    return w
-      .url(url)
-      .post({ ...body })
-      .json();
-  };
-
-  const fetchData = async (url, callback) => {
-    await w
-      .url(url)
-      .get()
-      .json(json => {
-        callback(json);
-      });
-  };
 
   useEffect(() => {
     fetchData(`/api/teams/${match.params.id}`, setTeam);

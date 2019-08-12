@@ -1,6 +1,5 @@
-aiohttp_security[session]
 aiohttp
 aiopg
-aioredis
 arrow
 passlib
+pyjwt[crypto]

@@ -5,10 +5,10 @@ import os
 import smtplib
 
 import arrow
-from aiohttp_security import check_authorized
 import aiohttp
 from aiohttp import web
 from app.utils.send_invite import send_invites
+from ..utils.authorize import authorize
 
 
 def myconverter(o):
@@ -18,7 +18,7 @@ def myconverter(o):
 
 class TeamEvents(web.View):
     async def get(self):
-        await check_authorized(self.request)
+        authorize(self.request)
         id = self.request.match_info.get("id")
 
         sql = "SELECT id, name, date, team FROM events WHERE team = %s"
@@ -70,7 +70,7 @@ class TeamEvents(web.View):
 
 class EventView(web.View):
     async def get(self):
-        await check_authorized(self.request)
+        authorize(self.request)
         event_id = self.request.match_info.get("id")
 
         sql = """SELECT e.id, e.name, e.date, e.team, e.refreshments

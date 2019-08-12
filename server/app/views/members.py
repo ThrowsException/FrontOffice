@@ -1,10 +1,10 @@
 from aiohttp import web
-from aiohttp_security import check_authorized
+from ..utils.authorize import authorize
 
 
 class TeamMembers(web.View):
     async def get(self):
-        await check_authorized(self.request)
+        authorize(self.request)
         id = self.request.match_info.get("id")
 
         sql = "SELECT * FROM members WHERE team = %s"
@@ -22,7 +22,7 @@ class TeamMembers(web.View):
 
 class MemberView(web.View):
     async def get(self):
-        await check_authorized(self.request)
+        authorize(self.request)
         member_id = self.request.match_info.get("id")
 
         sql = "SELECT * FROM members"
@@ -40,7 +40,7 @@ class MemberView(web.View):
         return web.json_response(items)
 
     async def post(self):
-        await check_authorized(self.request)
+        authorize(self.request)
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
                 body = await self.request.json()
