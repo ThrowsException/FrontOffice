@@ -2,13 +2,19 @@ import styled from "styled-components";
 
 export default styled.input`
   font-size: 1em;
-  padding: 1em 0;
-  margin-bottom: 8px;
+  height: 56px;
   padding-left: 1em;
-  outline: 0;
-  border-width: 0 0 2px;
-  border-color: black;
   margin-bottom: 2px;
   box-sizing: border-box;
-  background: none;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+`;
+
+export const StyledSelect = styled.select`
+  font-size: 1em;
+  padding-left: 1em;
+  height: 56px;
+  border-radius: 4px;
+  background: transparent;
+  margin: 1em 0;
 `;

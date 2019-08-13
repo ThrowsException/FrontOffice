@@ -56,7 +56,7 @@ const TeamDetails = props => {
       name,
       date: format(l, "yyyy-MM-dd HH:mm:ssxxxxx"),
       team: match.params.id,
-      refreshments
+      refreshments: refreshments ? refreshments : null
     });
     setEvents([...events, event]);
   };

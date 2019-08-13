@@ -3,7 +3,17 @@ import PropTypes from "prop-types";
 import { startOfToday, format } from "date-fns";
 import { Formik } from "formik";
 import Button from "./Button";
-import Input from "./Input";
+import Input, { StyledSelect } from "./Input";
+
+const validate = values => {
+  const errors = {};
+
+  if (!values.name.trim()) {
+    errors.name = "Name Required";
+  }
+
+  return errors;
+};
 
 const EventForm = ({ submit, players }) => {
   return (
@@ -12,7 +22,7 @@ const EventForm = ({ submit, players }) => {
       initialValues={{
         date: format(startOfToday(), "yyyy-MM-dd"),
         name: "",
-        refreshments: players.length > 0 ? players[0].id : "",
+        refreshments: "",
         hour: 1,
         minute: 0,
         period: "PM"
@@ -20,8 +30,16 @@ const EventForm = ({ submit, players }) => {
       onSubmit={values => {
         submit(values);
       }}
+      validate={validate}
     >
-      {({ values, handleChange, handleBlur, handleSubmit }) => (
+      {({
+        values,
+        errors,
+        touched,
+        handleChange,
+        handleBlur,
+        handleSubmit
+      }) => (
         <form
           onSubmit={handleSubmit}
           style={{
@@ -34,22 +52,25 @@ const EventForm = ({ submit, players }) => {
             name="name"
             placeholder="name"
             onChange={handleChange}
-            in
             value={values.name}
           />
-          <select
+          {errors.name && touched.name && <div>{errors.name}</div>}
+
+          <StyledSelect
             name="refreshments"
             onChange={handleChange}
             value={values.refreshments}
             onBlur={handleBlur}
           >
+            <option value="">Refreshments...</option>
             {players.map(i => (
               <option key={i.id} value={i.id}>
                 {i.name}
               </option>
             ))}
-          </select>
-          <Input
+          </StyledSelect>
+          <input
+            style={{ width: "150px" }}
             required
             type="date"
             name="date"
@@ -60,7 +81,7 @@ const EventForm = ({ submit, players }) => {
             onBlur={handleBlur}
           />
           <div>
-            <select
+            <StyledSelect
               name="hour"
               onChange={handleChange}
               onBlur={handleBlur}
@@ -71,8 +92,8 @@ const EventForm = ({ submit, players }) => {
                   {i + 1}
                 </option>
               ))}
-            </select>
-            <select
+            </StyledSelect>
+            <StyledSelect
               name="minute"
               onChange={handleChange}
               onBlur={handleBlur}
@@ -83,8 +104,8 @@ const EventForm = ({ submit, players }) => {
                   {`00${i}`.substr(-2, 2)}
                 </option>
               ))}
-            </select>
-            <select
+            </StyledSelect>
+            <StyledSelect
               name="period"
               onChange={handleChange}
               onBlur={handleBlur}
@@ -92,7 +113,7 @@ const EventForm = ({ submit, players }) => {
             >
               <option value="AM">AM</option>
               <option value="PM">PM</option>
-            </select>
+            </StyledSelect>
           </div>
           <Button type="submit">Create Event</Button>
         </form>
