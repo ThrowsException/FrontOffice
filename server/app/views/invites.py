@@ -9,7 +9,6 @@ from app.utils.send_invite import send_invites
 
 class InviteView(web.View):
     async def get(self):
-        await check_authorized(self.request)
         invite_id = self.request.match_info.get("id")
         response = self.request.query.get("r")
 
