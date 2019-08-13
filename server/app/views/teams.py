@@ -1,5 +1,3 @@
-from textwrap import dedent
-
 from aiohttp import web
 from aiohttp_security import check_authorized, authorized_userid
 
@@ -14,17 +12,17 @@ class TeamView(web.View):
             SELECT t.* 
              FROM teams t 
              JOIN owners o ON t.id = o.team
-             WHERE o.owner = {}
-        """.format(
-            user_id
-        )
+             WHERE o.owner = %s
+        """
+        clause = (user_id,)
         if team_id:
-            sql = "{} AND t.id = {}".format(sql, team_id)
+            sql = f"{sql} AND t.id = %s".format(sql)
+            clause = (user_id, team_id)
 
         items = []
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
-                await cur.execute(sql)
+                await cur.execute(sql, clause)
                 result = await cur.fetchall()
 
                 items = [{"id": x[0], "name": x[1]} for x in result]
@@ -37,26 +35,18 @@ class TeamView(web.View):
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
                 body = await self.request.json()
-                sql = dedent(
-                    """
+                sql = """
                     INSERT INTO teams (name)
-                    VALUES ('{}') RETURNING id
-                """.format(
-                        body["name"]
-                    )
-                )
-                await cur.execute(sql)
+                    VALUES (%s) RETURNING id
+                """
+                await cur.execute(sql, (body["name"],))
                 result = await cur.fetchone()
 
-                sql = dedent(
-                    """
+                sql = """
                     INSERT INTO owners
-                    VALUES ('{}', '{}')
-                """.format(
-                        result[0], user_id
-                    )
-                )
-                await cur.execute(sql)
+                    VALUES (%s, %s)
+                """
+                await cur.execute(sql, (result[0], user_id))
                 return web.json_response({"id": result[0], "name": body["name"]})
 
     async def delete(self):
@@ -65,12 +55,10 @@ class TeamView(web.View):
 
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
-                await cur.execute(
-                    "DELETE FROM OWNERS WHERE TEAM = '{}'".format(team_id)
-                )
-                await cur.execute("DELETE FROM MEMBERS WHERE ID = '{}'".format(team_id))
-                await cur.execute("DELETE FROM EVENTS WHERE ID = '{}'".format(team_id))
-                await cur.execute("DELETE FROM TEAMS WHERE ID = '{}'".format(team_id))
+                await cur.execute("DELETE FROM OWNERS WHERE TEAM = %s", (team_id,))
+                await cur.execute("DELETE FROM MEMBERS WHERE ID = %s", (team_id,))
+                await cur.execute("DELETE FROM EVENTS WHERE ID = %s", (team_id,))
+                await cur.execute("DELETE FROM TEAMS WHERE ID = %s", (team_id,))
                 resp_status = 204
                 return web.json_response("", status=resp_status)
 

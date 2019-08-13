@@ -7,12 +7,10 @@ class DBAuthorizationPolicy(AbstractAuthorizationPolicy):
         self.db = db
 
     async def authorized_userid(self, identity):
-        sql = "SELECT * FROM users WHERE id = '{}' and disabled = false".format(
-            identity
-        )
+        sql = "SELECT * FROM users WHERE id = %s and disabled = false"
         async with self.db.acquire() as conn:
             async with conn.cursor() as cur:
-                await cur.execute(sql)
+                await cur.execute(sql, (identity,))
                 result = await cur.fetchall()
                 if result:
                     return identity
@@ -25,10 +23,8 @@ class DBAuthorizationPolicy(AbstractAuthorizationPolicy):
 
         async with self.db.acquire() as conn:
             async with conn.cursor() as cur:
-                sql = "SELECT * FROM users WHERE id = '{}' and disabled = false".format(
-                    identity
-                )
-                await cur.execute(sql)
+                sql = "SELECT * FROM users WHERE id = %s and disabled = false"
+                await cur.execute(sql, (identity,))
                 user = await cur.fetchone()
                 if user is not None:
                     user_id = user[0]
@@ -36,10 +32,8 @@ class DBAuthorizationPolicy(AbstractAuthorizationPolicy):
                     if is_superuser:
                         return True
 
-                    sql = "SELECT * FROM permissions WHERE user_id = '{}'".format(
-                        user_id
-                    )
-                    await cur.execute(sql)
+                    sql = "SELECT * FROM permissions WHERE user_id = %s"
+                    await cur.execute(sql, (user_id,))
                     result = await cur.fetchall()
                     for record in result:
                         if record.perm_name == permission:
@@ -51,10 +45,8 @@ class DBAuthorizationPolicy(AbstractAuthorizationPolicy):
 async def check_credentials(db, username, password):
     async with db.acquire() as conn:
         async with conn.cursor() as cur:
-            sql = "SELECT * FROM users WHERE login = '{}' and disabled = false".format(
-                username
-            )
-            await cur.execute(sql)
+            sql = "SELECT * FROM users WHERE login = %s and disabled = false"
+            await cur.execute(sql, (username,))
             user = await cur.fetchone()
             if user is not None:
                 hash = user[2]
@@ -65,9 +57,7 @@ async def check_credentials(db, username, password):
 async def get_user(db, login):
     async with db.acquire() as conn:
         async with conn.cursor() as cur:
-            sql = "SELECT * FROM users WHERE login = '{}' and disabled = false".format(
-                login
-            )
-            await cur.execute(sql)
+            sql = "SELECT * FROM users WHERE login = %s and disabled = false"
+            await cur.execute(sql, (login,))
             user = await cur.fetchone()
             return user

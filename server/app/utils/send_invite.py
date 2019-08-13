@@ -6,11 +6,15 @@ import smtplib
 async def send_invites(invites, event):
     if os.getenv("EMAIL_API_KEY", None):
         REPLY_URL = """
+            {refreshments}
             <a href="https://frontoffice.app/api/invites/{code}?r=no">For No</a>
             <a href="https://frontoffice.app/api/invites/{code}?r=yes"> For Yes</a>
             """
+        refreshments = ""
         personalizations = []
         for invite in invites:
+            if event[4] == invite["member"]:
+                refreshments = "YOU ARE BRINGING BEER"
             personalizations.append(
                 {
                     "to": [{"email": invite["email"]}],

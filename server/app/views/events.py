@@ -3,7 +3,6 @@ from functools import partial
 import json
 import os
 import smtplib
-from textwrap import dedent
 
 import arrow
 from aiohttp_security import check_authorized
@@ -22,12 +21,12 @@ class TeamEvents(web.View):
         await check_authorized(self.request)
         id = self.request.match_info.get("id")
 
-        sql = "SELECT id, name, date, team FROM events WHERE team = {}".format(id)
+        sql = "SELECT id, name, date, team FROM events WHERE team = %s"
 
         items = []
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
-                await cur.execute(sql)
+                await cur.execute(sql, (id))
                 result = await cur.fetchall()
                 items = [
                     {
@@ -51,19 +50,19 @@ class EventView(web.View):
         FROM events e
         """
         if event_id:
-            sql = "{} where e.id = {}".format(sql, event_id)
+            sql = f"{sql} where e.id = %s"
 
         members_sql = """
-        SELECT m.id, m.name, m.email, i.id, i.reply from members m 
-        LEFT JOIN invites i 
-        ON m.id = i.member 
-        where team = {}
+            SELECT m.id, m.name, m.email, i.id, i.reply from members m 
+            LEFT JOIN invites i 
+            ON m.id = i.member 
+            where team = %s
         """
 
         event = {}
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
-                await cur.execute(sql)
+                await cur.execute(sql, (event_id))
                 result = await cur.fetchone()
                 if result:
                     event = {
@@ -75,7 +74,7 @@ class EventView(web.View):
                         "members": [],
                     }
 
-                    await cur.execute(members_sql.format(result[3]))
+                    await cur.execute(members_sql, (result[3],))
                     result = await cur.fetchall()
                     if result:
                         event["members"] = [
@@ -98,20 +97,18 @@ class EventView(web.View):
         needs_invite = []
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
-
                 body = await self.request.json()
-                sql = dedent(
-                    """
+                sql = """ 
                     INSERT INTO events (name, date, team, refreshments)
-                    VALUES ('{}', '{}', '{}', '{}') RETURNING id
-                """.format(
-                        body["name"], body["date"], body["team"], body["refreshments"]
-                    )
+                    VALUES (%s, %s, %s, %s) RETURNING id
+                """
+                await cur.execute(
+                    sql,
+                    (body["name"], body["date"], body["team"], body["refreshments"]),
                 )
-                await cur.execute(sql)
                 result = await cur.fetchone()
 
-                # sql = dedent(
+                # sql =
                 #     """
                 #     SELECT id, email
                 #     FROM members
@@ -119,19 +116,17 @@ class EventView(web.View):
                 # """.format(
                 #         body["team"]
                 #     )
-                # )
                 # await cur.execute(sql)
                 # members = await cur.fetchall()
 
                 # for member in members:
-                #     sql = dedent(
+                #     sql =
                 #         """
                 #         INSERT INTO invites (event, member, reply)
                 #         VALUES ('{}', '{}', 'false') RETURNING id
                 #     """.format(
                 #             result[0], member[0]
                 #         )
-                #     )
                 #     await cur.execute(sql)
                 #     invite = await cur.fetchone()
 

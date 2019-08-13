@@ -1,6 +1,5 @@
 import os
 import smtplib
-from textwrap import dedent
 from aiohttp_security import check_authorized
 
 from aiohttp import web
@@ -16,26 +15,23 @@ class InviteView(web.View):
 
         sql = "SELECT * FROM invites"
         if invite_id:
-            sql = "{} WHERE id = {}".format(sql, invite_id)
+            sql = f"{sql} WHERE id = %s"
 
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
-                await cur.execute(sql)
+                await cur.execute(sql, (invite_id,))
                 result = await cur.fetchall()
 
                 if result:
                     if response == "yes":
                         await cur.execute(
-                            "UPDATE invites set reply={} where id={}".format(
-                                True, invite_id
-                            )
+                            "UPDATE invites set reply=%s where id=%s", (True, invite_id)
                         )
                         return web.Response(text="Thanks")
                     else:
                         await cur.execute(
-                            "UPDATE invites set reply={} where id={}".format(
-                                False, invite_id
-                            )
+                            "UPDATE invites set reply=%s where id=%s",
+                            (False, invite_id),
                         )
                         return web.Response(text="Boo")
                 else:
@@ -48,46 +44,34 @@ class InviteView(web.View):
 
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
-                sql = dedent(
-                    """
+                sql = """
                     SELECT *
                     FROM events
-                    WHERE id = '{}'
-                """.format(
-                        event_id
-                    )
-                )
-                await cur.execute(sql)
+                    WHERE id = %s
+                """
+                await cur.execute(sql, (event_id,))
                 event = await cur.fetchone()
 
-                sql = dedent(
-                    """
+                sql = """
                     SELECT e.id, m.id, m.email, i.id, i.reply
                     FROM events e
                     JOIN members m USING (team)
                     LEFT JOIN invites i ON m.id = i.member 
-                    WHERE e.id = '{}' and i.reply is null
-                """.format(
-                        event_id
-                    )
-                )
-                await cur.execute(sql)
+                    WHERE e.id = %s and i.reply is null
+                """
+                await cur.execute(sql, (event_id,))
                 results = await cur.fetchall()
 
                 needs_invite = []
                 for record in results:
-                    sql = dedent(
-                        """
+                    sql = """
                         INSERT INTO invites (event, member)
-                        VALUES ('{}', '{}') 
+                        VALUES (%s, %s) 
                         ON CONFLICT DO NOTHING
-                        RETURNING id
-                       
-                    """.format(
-                            record[0], record[1]
-                        )
-                    )
-                    await cur.execute(sql)
+                        RETURNING id                       
+                    """
+
+                    await cur.execute(sql, (record[0], record[1]))
                     result = await cur.fetchone()
                     if result:
                         needs_invite.append(
