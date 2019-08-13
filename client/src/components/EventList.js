@@ -44,6 +44,13 @@ const EventDetails = styled.div`
   padding: 10px 2px;
 `;
 
+const gatherStats = event => {
+  const checked = event.replies.filter(r => r.reply === true);
+  const out = event.replies.filter(r => r.reply === false);
+  const waiting = event.replies.filter(r => r.reply === null);
+  return `${checked.length} In | ${out.length} Out | ${waiting.length} No Reply`;
+};
+
 const EventList = ({ events }) => {
   return (
     <>
@@ -58,7 +65,7 @@ const EventList = ({ events }) => {
                   </Link>
                 </EventTitle>
                 <EventTitle>{format(new Date(event.date), "P p")}</EventTitle>
-                <EventTitle>14 Checked In</EventTitle>
+                <EventTitle>{gatherStats(event)}</EventTitle>
                 {/* <Button variant="delete">Delete</Button> */}
               </EventDetails>
             </Event>

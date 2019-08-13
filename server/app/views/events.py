@@ -23,6 +23,17 @@ class TeamEvents(web.View):
 
         sql = "SELECT id, name, date, team FROM events WHERE team = %s"
 
+        members_sql = """
+            SELECT m.id, m.name, m.email, i.id, i.reply, e.id from members m
+            LEFT JOIN events e
+            ON m.team = e.team
+            LEFT JOIN invites i
+            ON e.id = i.event
+            AND i.member = m.id
+            where e.id = %s
+            and e.team = %s
+        """
+
         items = []
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
@@ -37,6 +48,22 @@ class TeamEvents(web.View):
                     }
                     for x in result
                 ]
+
+                for event in items:
+                    await cur.execute(members_sql, (event["id"], id))
+                    result = await cur.fetchall()
+                    if result:
+                        event["replies"] = [
+                            {
+                                "id": x[0],
+                                "name": x[1],
+                                "email": x[2],
+                                "invite_id": x[3],
+                                "reply": x[4],
+                                "event": x[5],
+                            }
+                            for x in result
+                        ]
 
         return web.json_response(items)
 
@@ -56,7 +83,18 @@ class EventView(web.View):
             SELECT m.id, m.name, m.email, i.id, i.reply from members m 
             LEFT JOIN invites i 
             ON m.id = i.member 
-            where team = %s
+            where i.event = %s
+        """
+
+        members_sql = """
+            SELECT m.id, m.name, m.email, i.id, i.reply, e.id from members m
+            LEFT JOIN events e
+            ON m.team = e.team
+            LEFT JOIN invites i
+            ON e.id = i.event
+            AND i.member = m.id
+            where e.id = %s
+            and e.team = %s
         """
 
         event = {}
@@ -74,7 +112,7 @@ class EventView(web.View):
                         "members": [],
                     }
 
-                    await cur.execute(members_sql, (result[3],))
+                    await cur.execute(members_sql, (event_id, result[3]))
                     result = await cur.fetchall()
                     if result:
                         event["members"] = [

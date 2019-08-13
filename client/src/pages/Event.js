@@ -9,9 +9,14 @@ const EventReply = styled.span`
   color: ${p => (p.reply ? "green" : "red")};
 `;
 
+const TeamName = styled.h1`
+  font-size: 4em;
+`;
+
 const Event = props => {
   const { match } = props;
   const [event, setEvent] = useState({ date: new Date(), members: [] });
+  const [team, setTeam] = useState([{ name: "Loading..." }]);
 
   const fetchData = async (url, callback) => {
     await w
@@ -27,6 +32,7 @@ const Event = props => {
   };
 
   useEffect(() => {
+    fetchData(`/api/teams/${match.params.id}`, setTeam);
     fetchData(`/api/events/${match.params.eventId}`, setEvent);
   }, {});
 
@@ -45,6 +51,7 @@ const Event = props => {
 
   return (
     <Layout {...props}>
+      <TeamName>{team[0].name}</TeamName>
       <h1>{event.name}</h1>
       <h1>{format(new Date(event.date), "P p")}</h1>
       <h3>
