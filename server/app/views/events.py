@@ -181,29 +181,3 @@ class EventView(web.View):
                     },
                     status=resp_status,
                 )
-
-
-class CheckinsView(web.View):
-    async def get(self):
-        event_id = self.request.match_info.get("id")
-
-        members_sql = """
-            SELECT m.id, m.name, m.email, i.id, i.reply, e.id from members m
-            LEFT JOIN events e
-            ON m.team = e.team
-            LEFT JOIN invites i
-            ON e.id = i.event
-            AND i.member = m.id
-            where e.id = %s
-            and e.team = m.team
-        """
-
-        async with self.request.app["db_pool"].acquire() as conn:
-            async with conn.cursor() as cur:
-                await cur.execute(members_sql, (event_id))
-                result = await cur.fetchall()
-                if result:
-                    items = [{"name": x[1], "reply": x[4]} for x in result]
-
-        return web.json_response(items, dumps=partial(json.dumps, default=myconverter))
-

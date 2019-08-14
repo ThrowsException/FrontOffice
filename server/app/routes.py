@@ -40,7 +40,6 @@ def setup_routes(app):
 
     app.router.add_view("/api/events", events.EventView)
     app.router.add_view("/api/events/{id}", events.EventView)
-    app.router.add_view("/api/checkins/{id}", events.CheckinsView)
 
     app.router.add_view("/api/members", members.MemberView)
     app.router.add_view("/api/members/{id}", members.MemberView)

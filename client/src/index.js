@@ -7,7 +7,6 @@ import Teams from "./pages/Teams";
 import Event from "./pages/Event";
 import Features from "./pages/Features";
 import Roster from "./pages/Roster";
-import Checkins from "./pages/Checkins";
 import "typeface-montserrat";
 
 function AppRouter() {
@@ -18,7 +17,6 @@ function AppRouter() {
         <Route path="/teams/:id" exact component={TeamDetails} />
         <Route path="/teams/:id/events/:eventId" exact component={Event} />
         <Route path="/teams/:id/roster" exact component={Roster} />
-        <Route path="/events/:id" exact component={Checkins} />
         <Route path="/login" exact component={Login} />
         <Route component={Features} />
       </Switch>
