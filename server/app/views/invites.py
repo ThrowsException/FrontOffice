@@ -44,7 +44,7 @@ class InviteView(web.View):
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
                 sql = """
-                    SELECT *
+                    SELECT id, name, date, team, refreshments
                     FROM events
                     WHERE id = %s
                 """
