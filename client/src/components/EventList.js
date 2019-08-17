@@ -65,7 +65,7 @@ const EventList = ({ events }) => {
                   </Link>
                 </EventTitle>
                 <EventTitle>{format(new Date(event.date), "P p")}</EventTitle>
-                <EventTitle>{gatherStats(event)}</EventTitle>
+                <EventTitle>{events.replies && gatherStats(event)}</EventTitle>
                 {/* <Button variant="delete">Delete</Button> */}
               </EventDetails>
             </Event>

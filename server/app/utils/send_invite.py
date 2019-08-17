@@ -41,14 +41,14 @@ async def send_invites(invites, event):
             if event[4] == invite["member"]:
                 refreshments = "YOU ARE BRINGING BEER"
 
-            date = arrow.get(event[2]).to("US/Eastern").format("YYYY-MM-DD hh:mm")
+            date = arrow.get(event[2]).to("US/Eastern").format("YYYY-MM-DD h:mm a")
             personalizations.append(
                 {
                     "to": [{"email": invite["email"]}],
                     "substitutions": {
                         "{code}": str(invite["code"]),
                         "{event}": event[1],
-                        "{date}": event[2],
+                        "{date}": date,
                     },
                 }
             )
