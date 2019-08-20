@@ -24,7 +24,6 @@ def authorize(request):
         raise web.HTTPUnauthorized()
 
     # construct the public key
-    print(keys[key_index])
     public_key = jwt.algorithms.RSAAlgorithm.from_jwk(json.dumps(keys[key_index]))
     try:
         decoded = jwt.decode(
