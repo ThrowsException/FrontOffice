@@ -1,13 +1,10 @@
 import datetime
 from functools import partial
 import json
-import os
-import smtplib
 
-import arrow
-import aiohttp
 from aiohttp import web
-from app.utils.send_invite import send_invites
+import arrow
+
 from ..utils.authorize import authorize
 
 
@@ -19,7 +16,7 @@ def myconverter(o):
 class TeamEvents(web.View):
     async def get(self):
         authorize(self.request)
-        id = self.request.match_info.get("id")
+        team_id = self.request.match_info.get("id")
 
         sql = "SELECT id, name, date, team FROM events WHERE team = %s"
 
@@ -37,7 +34,7 @@ class TeamEvents(web.View):
         items = []
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
-                await cur.execute(sql, (id))
+                await cur.execute(sql, (team_id))
                 result = await cur.fetchall()
                 items = [
                     {
@@ -50,7 +47,7 @@ class TeamEvents(web.View):
                 ]
 
                 for event in items:
-                    await cur.execute(members_sql, (event["id"], id))
+                    await cur.execute(members_sql, (event["id"], team_id))
                     result = await cur.fetchall()
                     if result:
                         event["replies"] = [
@@ -80,9 +77,9 @@ class EventView(web.View):
             sql = f"{sql} where e.id = %s"
 
         members_sql = """
-            SELECT m.id, m.name, m.email, i.id, i.reply from members m 
-            LEFT JOIN invites i 
-            ON m.id = i.member 
+            SELECT m.id, m.name, m.email, i.id, i.reply from members m
+            LEFT JOIN invites i
+            ON m.id = i.member
             where i.event = %s
         """
 
@@ -132,11 +129,10 @@ class EventView(web.View):
         return web.json_response(event, dumps=partial(json.dumps, default=myconverter))
 
     async def post(self):
-        needs_invite = []
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
                 body = await self.request.json()
-                sql = """ 
+                sql = """
                     INSERT INTO events (name, date, team, refreshments)
                     VALUES (%s, %s, %s, %s) RETURNING id
                 """

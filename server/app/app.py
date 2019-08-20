@@ -1,12 +1,10 @@
-from concurrent.futures import TimeoutError
+import json
 import logging
 import os
 import urllib.request
-import json
 
 from aiohttp import web
 import aiopg  # type: ignore
-from aiohttp.web import middleware
 import psycopg2
 
 from app.routes import setup_routes
@@ -18,7 +16,6 @@ async def setup_cognito_keys(app):
     keys_url = "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_I1wwaxDmP/.well-known/jwks.json"
     response = urllib.request.urlopen(keys_url)
     keys = json.loads(response.read())["keys"]
-    print(keys)
     app["cognito_keys"] = keys
 
 

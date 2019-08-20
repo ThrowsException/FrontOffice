@@ -1,5 +1,5 @@
 from aiohttp import web
-import jwt
+
 from ..utils.authorize import authorize
 
 
@@ -10,8 +10,8 @@ class TeamView(web.View):
         team_id = self.request.match_info.get("id")
 
         sql = """
-            SELECT t.* 
-             FROM teams t 
+            SELECT t.*
+             FROM teams t
              JOIN owners o ON t.id = o.team
              WHERE o.owner = %s
         """
@@ -64,4 +64,3 @@ class TeamView(web.View):
                 await cur.execute("DELETE FROM TEAMS WHERE ID = %s", (team_id,))
                 resp_status = 204
                 return web.json_response("", status=resp_status)
-

@@ -1,6 +1,7 @@
-import jwt
 import json
+
 from aiohttp import web
+import jwt
 
 
 def authorize(request):
@@ -20,7 +21,6 @@ def authorize(request):
             key_index = i
             break
     if key_index == -1:
-        print("Public key not found in jwks.json")
         raise web.HTTPUnauthorized()
 
     # construct the public key

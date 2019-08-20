@@ -1,18 +1,19 @@
 from aiohttp import web
+
 from ..utils.authorize import authorize
 
 
 class TeamMembers(web.View):
     async def get(self):
         authorize(self.request)
-        id = self.request.match_info.get("id")
+        team_id = self.request.match_info.get("id")
 
         sql = "SELECT * FROM members WHERE team = %s"
 
         items = []
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
-                await cur.execute(sql, (id,))
+                await cur.execute(sql, (team_id,))
                 result = await cur.fetchall()
 
                 items = [{"id": x[0], "name": x[1], "email": x[2]} for x in result]

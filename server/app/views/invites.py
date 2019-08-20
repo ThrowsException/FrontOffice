@@ -1,6 +1,3 @@
-import os
-import smtplib
-
 from aiohttp import web
 
 from app.utils.send_invite import send_invites
@@ -55,7 +52,7 @@ class InviteView(web.View):
                     SELECT e.id, m.id, m.email, i.id, i.reply
                     FROM events e
                     JOIN members m USING (team)
-                    LEFT JOIN invites i ON m.id = i.member 
+                    LEFT JOIN invites i ON m.id = i.member
                     WHERE e.id = %s and i.reply is null
                 """
                 await cur.execute(sql, (event_id,))
@@ -65,9 +62,9 @@ class InviteView(web.View):
                 for record in results:
                     sql = """
                         INSERT INTO invites (event, member)
-                        VALUES (%s, %s) 
+                        VALUES (%s, %s)
                         ON CONFLICT DO NOTHING
-                        RETURNING id                       
+                        RETURNING id
                     """
 
                     await cur.execute(sql, (record[0], record[1]))
