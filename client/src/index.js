@@ -4,19 +4,16 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
-  Redirect,
-  history
+  Redirect
 } from "react-router-dom";
 import TeamDetails from "./pages/TeamDetails";
-import Login from "./pages/Login";
 import Teams from "./pages/Teams";
 import Event from "./pages/Event";
 import Features from "./pages/Features";
 import Roster from "./pages/Roster";
 import "typeface-montserrat";
-import Amplify, { Auth, Hub, Logger } from "aws-amplify";
-import { Authenticator, withAuthenticator } from "aws-amplify-react"; // or 'aws-amplify-react-native';
-
+import Amplify, { Auth, Hub } from "aws-amplify";
+import { Authenticator, withAuthenticator } from "aws-amplify-react";
 const config = {
   Auth: {
     mandatorySignIn: true,
@@ -46,7 +43,6 @@ const PrivateRoutes = props => {
         <Route path="/teams/:id" exact component={TeamDetails} />
         <Route path="/teams/:id/events/:eventId" exact component={Event} />
         <Route path="/teams/:id/roster" exact component={Roster} />
-        <Route component={Features} />
       </Switch>
     </Router>
   );
