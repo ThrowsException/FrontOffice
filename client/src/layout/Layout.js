@@ -1,10 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Composition } from "atomic-layout";
+import { Composition, Only } from "atomic-layout";
 import { Link } from "react-router-dom";
 
 const areas = `
+  header
+  content
+`;
+
+const areasMd = `
  header header
  aside content
 `;
@@ -34,20 +39,37 @@ const Container = styled.div`
   max-width: 960px;
 `;
 
+const NavLink = styled(Link)`
+  color: white;
+  padding: 8px;
+`;
+
 const Layout = props => {
   const { match } = props;
   return (
     <Composition
       height="100vh"
       areas={areas}
-      templateCols="320px 1fr"
+      areasMd={areasMd}
       templateRows="auto 1fr"
+      templateColsMd="240px 1fr"
     >
       {({ Header, Aside, Content }) => (
         <>
           <Header>
             <NavBar>
               <NavTitle>Front Office</NavTitle>
+              <Only to="md">
+                <NavLink to="/teams">Home</NavLink>
+                {match.params.id && (
+                  <NavLink to={`/teams/${match.params.id}`}>Events</NavLink>
+                )}
+                {match.params.id && (
+                  <NavLink to={`/teams/${match.params.id}/roster`}>
+                    Roster
+                  </NavLink>
+                )}
+              </Only>
             </NavBar>
           </Header>
           <Aside style={{ background: "#0F0F0F0f" }}>
