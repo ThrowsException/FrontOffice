@@ -4,7 +4,7 @@ WORKDIR /tmp
 RUN apk update && apk add --no-cache postgresql-dev && \
   apk add --no-cache -t .build-deps gcc python3-dev musl-dev libffi-dev
 
-COPY ./server /tmp
+COPY . /tmp
 RUN pip install -r /tmp/requires/install.txt && \
   python setup.py bdist && python setup.py install && \
   apk del .build-deps

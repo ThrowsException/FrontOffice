@@ -59,9 +59,6 @@ function AppRouter() {
           path="/login"
           exact
           render={props => {
-            Auth.currentSession().then(value => {
-              console.log(value);
-            });
             return !Auth.user ? (
               <Redirect to="/teams" />
             ) : (
