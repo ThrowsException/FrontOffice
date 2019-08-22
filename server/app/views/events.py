@@ -142,6 +142,20 @@ class EventView(web.View):
                 )
                 result = await cur.fetchone()
 
+                game_day_sql = """
+                    INSERT INTO reminders (event, date, sent)
+                    VALUES (%s, DATE(%s), %s) RETURNING id
+                """
+                await cur.execute(game_day_sql, (result[0], body["date"], False))
+
+                reminder_sql = """
+                    INSERT INTO reminders (event, date, sent)
+                    VALUES (%s, DATE(%s) - interval '%s days', %s) RETURNING id
+                """
+                await cur.execute(
+                    reminder_sql, (result[0], body["date"], body["reminder"], False)
+                )
+
                 # sql =
                 #     """
                 #     SELECT id, email

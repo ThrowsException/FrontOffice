@@ -28,7 +28,8 @@ const TeamDetails = props => {
     hour,
     minute,
     period,
-    refreshments
+    refreshments,
+    reminder
   }) => {
     const h = period === "PM" ? parseInt(hour, 10) + 12 : hour;
     const l = parseISO(
@@ -40,7 +41,8 @@ const TeamDetails = props => {
       name,
       date: format(l, "yyyy-MM-dd HH:mm:ssxxxxx"),
       team: match.params.id,
-      refreshments: refreshments ? refreshments : null
+      refreshments: refreshments ? refreshments : null,
+      reminder
     });
     setEvents([...events, event]);
   };
