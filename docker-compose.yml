@@ -32,8 +32,8 @@ services:
 
   service:
     build:
-      context: .
-      dockerfile: ./server/Dockerfile
+      context: ./server
+      dockerfile: ./Dockerfile
     ports:
       - "8000:8080"
     depends_on:

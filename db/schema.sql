@@ -31,5 +31,12 @@ CREATE TABLE owners (
   owner UUID NOT NULL
 );
 
+CREATE TABLE reminders (
+  id bigserial PRIMARY KEY,
+  event bigint REFERENCES events NOT NULL,
+  date date NOT NULL,
+  sent boolean NOT NULL DEFAULT false
+);
+
 CREATE UNIQUE INDEX team_member ON members (email, team);
 CREATE UNIQUE INDEX member_invites ON invites (event, member);

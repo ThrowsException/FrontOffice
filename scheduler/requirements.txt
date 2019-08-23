@@ -1,0 +1,4 @@
+arrow
+jinja2
+psycopg2-binary
+requests
