@@ -3,6 +3,7 @@ from functools import partial
 import json
 
 from aiohttp import web
+from aiohttp_cors import CorsViewMixin
 import arrow
 
 from ..utils.authorize import authorize
@@ -13,7 +14,7 @@ def myconverter(o):
         return o.__str__()
 
 
-class TeamEvents(web.View):
+class TeamEvents(web.View, CorsViewMixin):
     async def get(self):
         authorize(self.request)
         team_id = self.request.match_info.get("id")
@@ -65,7 +66,7 @@ class TeamEvents(web.View):
         return web.json_response(items)
 
 
-class EventView(web.View):
+class EventView(web.View, CorsViewMixin):
     async def get(self):
         authorize(self.request)
         event_id = self.request.match_info.get("id")

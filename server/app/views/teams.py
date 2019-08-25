@@ -1,9 +1,10 @@
 from aiohttp import web
 
 from ..utils.authorize import authorize
+from aiohttp_cors import CorsViewMixin
 
 
-class TeamView(web.View):
+class TeamView(web.View, CorsViewMixin):
     async def get(self):
         authorize(self.request)
         user_id = self.request["user_id"]

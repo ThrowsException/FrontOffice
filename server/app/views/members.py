@@ -1,9 +1,10 @@
 from aiohttp import web
 
 from ..utils.authorize import authorize
+from aiohttp_cors import CorsViewMixin
 
 
-class TeamMembers(web.View):
+class TeamMembers(web.View, CorsViewMixin):
     async def get(self):
         authorize(self.request)
         team_id = self.request.match_info.get("id")
@@ -21,7 +22,7 @@ class TeamMembers(web.View):
         return web.json_response(items)
 
 
-class MemberView(web.View):
+class MemberView(web.View, CorsViewMixin):
     async def get(self):
         authorize(self.request)
         member_id = self.request.match_info.get("id")

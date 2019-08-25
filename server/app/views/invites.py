@@ -1,10 +1,11 @@
 from aiohttp import web
+from aiohttp_cors import CorsViewMixin
 
 from app.utils.send_invite import send_invites
 from ..utils.authorize import authorize
 
 
-class InviteView(web.View):
+class InviteView(web.View, CorsViewMixin):
     async def get(self):
         invite_id = self.request.match_info.get("id")
         response = self.request.query.get("r")

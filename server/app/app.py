@@ -4,6 +4,7 @@ import os
 import urllib.request
 
 from aiohttp import web
+import aiohttp_cors
 import aiopg  # type: ignore
 import psycopg2
 
@@ -38,6 +39,18 @@ def make_app() -> web.Application:
     app.on_startup.append(create_aiopg)
     app.on_startup.append(setup_cognito_keys)
     setup_routes(app)
+
+    cors = aiohttp_cors.setup(
+        app,
+        defaults={
+            "https://frontoffice.app": aiohttp_cors.ResourceOptions(
+                allow_credentials=True, expose_headers="*", allow_headers="*"
+            )
+        },
+    )
+    # Configure CORS on all routes.
+    for route in list(app.router.routes()):
+        cors.add(route)
 
     return app
 

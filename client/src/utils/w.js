@@ -1,10 +1,21 @@
 import wretch from "wretch";
 import { Auth } from "aws-amplify";
 
-const api = wretch().defer((w, url, options) => {
-  const { token } = options.context;
-  return w.auth(`Basic ${token.idToken.jwtToken}`);
-});
+let api = {};
+
+if (process.env.NODE_ENV === "production") {
+  api = wretch()
+    .url("https://api.frontoffice.app")
+    .defer((w, url, options) => {
+      const { token } = options.context;
+      return w.auth(`Basic ${token.idToken.jwtToken}`);
+    });
+} else {
+  api = wretch().defer((w, url, options) => {
+    const { token } = options.context;
+    return w.auth(`Basic ${token.idToken.jwtToken}`);
+  });
+}
 
 export const postData = async (url, body) => {
   let token = await Auth.currentSession();
