@@ -8,7 +8,8 @@ module.exports = merge(common, {
     historyApiFallback: true,
     proxy: {
       context: ["/api"],
-      target: "http://localhost:8000"
+      target: "http://localhost:8000",
+      pathRewrite: { "^/api": "" }
     }
   }
 });

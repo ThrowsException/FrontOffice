@@ -10,16 +10,16 @@ const Teams = props => {
 
   const onDelete = async id => {
     setTeams(teams.filter(item => item.id !== id));
-    await w(`/api/teams/${id}`).delete();
+    await w(`/teams/${id}`).delete();
   };
 
   useEffect(() => {
-    fetchData("/api/teams", setTeams);
+    fetchData("/teams", setTeams);
   }, []);
 
   const createTeam = async name => {
     if (name) {
-      const team = await postData("/api/teams", { name });
+      const team = await postData("/teams", { name });
       setTeams([...teams, team]);
       setFormVisible(false);
     }

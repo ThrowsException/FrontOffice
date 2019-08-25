@@ -17,9 +17,9 @@ const TeamDetails = props => {
   const [members, setMembers] = useState([]);
 
   useEffect(() => {
-    fetchData(`/api/teams/${match.params.id}`, setTeam);
-    fetchData(`/api/teams/${match.params.id}/events`, setEvents);
-    fetchData(`/api/teams/${match.params.id}/members`, setMembers);
+    fetchData(`/teams/${match.params.id}`, setTeam);
+    fetchData(`/teams/${match.params.id}/events`, setEvents);
+    fetchData(`/teams/${match.params.id}/members`, setMembers);
   }, []);
 
   const createEvent = async ({
@@ -37,7 +37,7 @@ const TeamDetails = props => {
       "P p",
       new Date()
     );
-    const event = await postData("/api/events", {
+    const event = await postData("/events", {
       name,
       date: format(l, "yyyy-MM-dd HH:mm:ssxxxxx"),
       team: match.params.id,

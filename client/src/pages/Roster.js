@@ -16,12 +16,12 @@ const TeamDetails = props => {
   const [members, setMembers] = useState([]);
 
   useEffect(() => {
-    fetchData(`/api/teams/${match.params.id}`, setTeam);
-    fetchData(`/api/teams/${match.params.id}/members`, setMembers);
+    fetchData(`/teams/${match.params.id}`, setTeam);
+    fetchData(`/teams/${match.params.id}/members`, setMembers);
   }, []);
 
   const createMember = async ({ name, email, phone }) => {
-    await postData("/api/members", {
+    await postData("/members", {
       name,
       email,
       phone,

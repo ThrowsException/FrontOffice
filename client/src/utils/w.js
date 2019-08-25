@@ -11,10 +11,12 @@ if (process.env.NODE_ENV === "production") {
       return w.auth(`Basic ${token.idToken.jwtToken}`);
     });
 } else {
-  api = wretch().defer((w, url, options) => {
-    const { token } = options.context;
-    return w.auth(`Basic ${token.idToken.jwtToken}`);
-  });
+  api = wretch()
+    .url("/api")
+    .defer((w, url, options) => {
+      const { token } = options.context;
+      return w.auth(`Basic ${token.idToken.jwtToken}`);
+    });
 }
 
 export const postData = async (url, body) => {

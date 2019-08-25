@@ -19,12 +19,12 @@ const Event = props => {
   const [team, setTeam] = useState([{ name: "Loading..." }]);
 
   const sendInvites = async () => {
-    postData("/api/invites", { event: event.id });
+    postData("/invites", { event: event.id });
   };
 
   useEffect(() => {
-    fetchData(`/api/teams/${match.params.id}`, setTeam);
-    fetchData(`/api/events/${match.params.eventId}`, setEvent);
+    fetchData(`/teams/${match.params.id}`, setTeam);
+    fetchData(`/events/${match.params.eventId}`, setEvent);
   }, {});
 
   const refreshment = event.members.find(member => {
