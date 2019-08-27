@@ -20,15 +20,16 @@ const Teams = props => {
   const createTeam = async name => {
     if (name) {
       const team = await postData("/teams", { name });
-      setTeams([...teams, team]);
+      setTeams([team, ...teams]);
       setFormVisible(false);
     }
   };
 
   return (
     <Layout {...props}>
+      <h1>Your Teams</h1>
       <TeamList items={teams} onDelete={onDelete} />
-      <Button onClick={() => setFormVisible(!formVisible)}>+ Add Team</Button>
+      <Button onClick={() => setFormVisible(!formVisible)}>Add Team</Button>
       {formVisible && <TeamForm submit={createTeam} />}
     </Layout>
   );

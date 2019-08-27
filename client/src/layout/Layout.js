@@ -1,17 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Composition, Only } from "atomic-layout";
+import { Composition } from "atomic-layout";
 import { Link } from "react-router-dom";
 
 const areas = `
   header
   content
-`;
-
-const areasMd = `
- header header
- aside content
 `;
 
 const NavBar = styled.div`
@@ -47,46 +42,24 @@ const NavLink = styled(Link)`
 const Layout = props => {
   const { match } = props;
   return (
-    <Composition
-      height="100vh"
-      areas={areas}
-      areasMd={areasMd}
-      templateRows="auto 1fr"
-      templateColsMd="240px 1fr"
-    >
-      {({ Header, Aside, Content }) => (
+    <Composition height="100vh" areas={areas} templateRows="auto 1fr">
+      {({ Header, Content }) => (
         <>
           <Header>
             <NavBar>
               <NavTitle>Front Office</NavTitle>
-              <Only to="md">
-                <NavLink to="/teams">Home</NavLink>
-                {match.params.id && (
-                  <NavLink to={`/teams/${match.params.id}`}>Events</NavLink>
-                )}
-                {match.params.id && (
-                  <NavLink to={`/teams/${match.params.id}/roster`}>
-                    Roster
-                  </NavLink>
-                )}
-              </Only>
+              {match.params.id && <NavLink to="/teams">Teams</NavLink>}
+              {match.params.id && (
+                <NavLink to={`/teams/${match.params.id}`}>Events</NavLink>
+              )}
+              {match.params.id && (
+                <NavLink to={`/teams/${match.params.id}/roster`}>
+                  Roster
+                </NavLink>
+              )}
             </NavBar>
           </Header>
-          <Aside style={{ background: "#0F0F0F0f" }}>
-            <Link to="/teams">
-              <h3>Home</h3>
-            </Link>
-            {match.params.id && (
-              <Link to={`/teams/${match.params.id}`}>
-                <h3>Events</h3>
-              </Link>
-            )}
-            {match.params.id && (
-              <Link to={`/teams/${match.params.id}/roster`}>
-                <h3>Roster</h3>
-              </Link>
-            )}
-          </Aside>
+
           <Content>
             <Root>
               <Container>{props.children}</Container>

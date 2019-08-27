@@ -2,9 +2,10 @@ import { format, parseISO } from "date-fns";
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import Skeleton from "react-loading-skeleton";
 import { EventList, EventForm } from "../components";
 import Layout from "../layout/Layout";
-import w, { postData, fetchData } from "../utils/w";
+import { postData, fetchData } from "../utils/w";
 
 const TeamName = styled.h1`
   font-size: 4em;
@@ -12,7 +13,7 @@ const TeamName = styled.h1`
 
 const TeamDetails = props => {
   const { match } = props;
-  const [team, setTeam] = useState([{ name: "Loading..." }]);
+  const [team, setTeam] = useState();
   const [events, setEvents] = useState([]);
   const [members, setMembers] = useState([]);
 
@@ -49,7 +50,7 @@ const TeamDetails = props => {
 
   return (
     <Layout {...props}>
-      <TeamName>{team[0].name}</TeamName>
+      <TeamName>{team ? team.name : <Skeleton />}</TeamName>
       <h2>Upcoming Events</h2>
       <EventList events={events} />
       <EventForm submit={createEvent} players={members} />

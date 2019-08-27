@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import Skeleton from "react-loading-skeleton";
 import { postData, fetchData } from "../utils/w";
 import { PlayerList, PlayerForm } from "../components";
 import Layout from "../layout/Layout";
@@ -11,7 +12,7 @@ const TeamName = styled.h1`
 
 const TeamDetails = props => {
   const { match } = props;
-  const [team, setTeam] = useState([{ name: "Loading..." }]);
+  const [team, setTeam] = useState();
 
   const [members, setMembers] = useState([]);
 
@@ -32,7 +33,7 @@ const TeamDetails = props => {
 
   return (
     <Layout {...props}>
-      <TeamName>{team[0].name}</TeamName>
+      <TeamName>{team ? team.name : <Skeleton />}</TeamName>
       <h2>Players</h2>
       <PlayerList members={members} />
       <PlayerForm submit={createMember} />

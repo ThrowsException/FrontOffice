@@ -11,23 +11,29 @@ class TeamView(web.View, CorsViewMixin):
         team_id = self.request.match_info.get("id")
 
         sql = """
-            SELECT t.*
+            SELECT t.id, t.name, t.date_created
              FROM teams t
              JOIN owners o ON t.id = o.team
              WHERE o.owner = %s
+             
         """
         clause = (user_id,)
         if team_id:
-            sql = f"{sql} AND t.id = %s".format(sql)
+            sql = f"{sql} AND t.id = %s"
             clause = (user_id, team_id)
 
+        sql = f"{sql} ORDER BY t.date_created desc"
         items = []
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
                 await cur.execute(sql, clause)
                 result = await cur.fetchall()
 
-                items = [{"id": x[0], "name": x[1]} for x in result]
+                items = None
+                if team_id:
+                    items = {"id": result[0][0], "name": result[0][1]}
+                else:
+                    items = [{"id": x[0], "name": x[1]} for x in result]
 
         return web.json_response(items)
 

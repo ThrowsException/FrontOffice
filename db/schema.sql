@@ -1,6 +1,7 @@
 CREATE TABLE teams (
   id bigserial PRIMARY KEY,
-  name text NOT NULL
+  name text NOT NULL,
+  date_created timestamp with time zone NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE members (
