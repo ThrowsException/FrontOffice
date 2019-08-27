@@ -23,7 +23,7 @@ export default () => (
         <Header>
           <NavBar>
             <NavTitle>Front Office</NavTitle>
-            <Link to="login">Login</Link>
+            <Link to="teams">Login</Link>
           </NavBar>
         </Header>
         <Content>
