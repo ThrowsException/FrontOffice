@@ -16,7 +16,7 @@ const TeamName = styled.h1`
 const Event = props => {
   const { match } = props;
   const [event, setEvent] = useState({ date: new Date(), members: [] });
-  const [team, setTeam] = useState([{ name: "Loading..." }]);
+  const [team, setTeam] = useState({ name: "" });
 
   const sendInvites = async () => {
     postData("/invites", { event: event.id });
@@ -42,7 +42,7 @@ const Event = props => {
 
   return (
     <Layout {...props}>
-      <TeamName>{team[0].name}</TeamName>
+      <TeamName>{team.name}</TeamName>
       <h1>{event.name}</h1>
       <h1>{format(new Date(event.date), "P p")}</h1>
       <h3>
