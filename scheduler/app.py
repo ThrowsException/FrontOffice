@@ -1,5 +1,6 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import logging
 import os
 import smtplib
 
@@ -9,6 +10,10 @@ import arrow
 import requests
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 env = Environment(
     loader=FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates")),
@@ -72,8 +77,11 @@ def send_invites(invites, event):
                 )
                 part1 = MIMEText(content, "html")
                 msg.attach(part1)
-
-                smtp.sendmail("me@me.com", invite["email"], msg.as_string())
+                try:
+                    logger.info("Sent reminder to %s" % (invite["email"],))
+                    smtp.sendmail("me@me.com", invite["email"], msg.as_string())
+                except Exception as e:
+                    logger.info("Exception while sending...", exc_info=e)
 
 
 HOST = os.getenv("POSTGRES_HOST", "db")
@@ -97,7 +105,7 @@ cur.execute(reminders_sql)
 reminders = cur.fetchall()
 
 for reminder in reminders:
-
+    logger.info("Reminder due for %s %s %s" % (reminder[0], reminder[1], reminder[2]))
     sql = """
         SELECT e.id, m.id, m.email, i.id, i.reply
         FROM events e
@@ -128,9 +136,9 @@ for reminder in reminders:
             needs_invite.append(
                 {"email": record[2], "code": record[3], "member": record[1]}
             )
-
     send_invites(needs_invite, reminder)
-    print(reminder)
+    logger.info("Reminders sent for %s" % (reminder[0],))
+
     cur.execute("UPDATE reminders SET sent = true WHERE id = %s", (reminder[5],))
     conn.commit()
 
