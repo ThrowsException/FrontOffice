@@ -75,7 +75,7 @@ class EventView(web.View, CorsViewMixin):
         FROM events e
         """
         if event_id:
-            sql = f"{sql} where e.id = %s"
+            sql = "{} where e.id = %s".format(sql)
 
         members_sql = """
             SELECT m.id, m.name, m.email, i.id, i.reply from members m
@@ -98,7 +98,7 @@ class EventView(web.View, CorsViewMixin):
         event = {}
         async with self.request.app["db_pool"].acquire() as conn:
             async with conn.cursor() as cur:
-                await cur.execute(sql, (event_id))
+                await cur.execute(sql, (event_id,))
                 result = await cur.fetchone()
                 if result:
                     event = {

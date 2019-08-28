@@ -8,5 +8,4 @@ COPY . /tmp
 RUN pip install -r /tmp/requirements.txt && \
   apk del .build-deps
 
-ENTRYPOINT ["python"]
-CMD ["app.py"]
+CMD ["python", "app.py"]

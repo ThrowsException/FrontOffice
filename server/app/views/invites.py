@@ -53,7 +53,7 @@ class InviteView(web.View, CorsViewMixin):
                     SELECT e.id, m.id, m.email, i.id, i.reply
                     FROM events e
                     JOIN members m USING (team)
-                    LEFT JOIN invites i ON m.id = i.member
+                    LEFT JOIN invites i ON e.id = i.event
                     WHERE e.id = %s and i.reply is null
                 """
                 await cur.execute(sql, (event_id,))
