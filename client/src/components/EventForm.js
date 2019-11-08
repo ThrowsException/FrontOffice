@@ -1,19 +1,19 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { startOfToday, format } from "date-fns";
-import { Formik, Field } from "formik";
-import Button from "./Button";
-import Input, { StyledSelect } from "./Input";
+import React from 'react'
+import PropTypes from 'prop-types'
+import { startOfToday, format } from 'date-fns'
+import { Formik, Field } from 'formik'
+import Button from './Button'
+import Input, { StyledSelect } from './Input'
 
 const validate = values => {
-  const errors = {};
+  const errors = {}
 
   if (!values.name.trim()) {
-    errors.name = "Name Required";
+    errors.name = 'Name Required'
   }
 
-  return errors;
-};
+  return errors
+}
 
 const EventForm = ({ submit, players }) => {
   return (
@@ -21,16 +21,16 @@ const EventForm = ({ submit, players }) => {
       <Formik
         enableReinitialize
         initialValues={{
-          date: format(startOfToday(), "yyyy-MM-dd"),
-          name: "",
-          refreshments: "",
+          date: format(startOfToday(), 'yyyy-MM-dd'),
+          name: '',
+          refreshments: '',
           hour: 1,
           minute: 0,
-          period: "PM",
-          reminder: 3
+          period: 'PM',
+          reminder: 3,
         }}
         onSubmit={values => {
-          submit(values);
+          submit(values)
         }}
         validate={validate}
       >
@@ -40,14 +40,14 @@ const EventForm = ({ submit, players }) => {
           touched,
           handleChange,
           handleBlur,
-          handleSubmit
+          handleSubmit,
         }) => (
           <form
             onSubmit={handleSubmit}
             style={{
-              display: "flex",
-              flexDirection: "column",
-              maxWidth: "960px"
+              display: 'flex',
+              flexDirection: 'column',
+              maxWidth: '960px',
             }}
           >
             <Input
@@ -72,11 +72,11 @@ const EventForm = ({ submit, players }) => {
               ))}
             </StyledSelect>
             <input
-              style={{ width: "150px" }}
+              style={{ width: '150px' }}
               required
               type="date"
               name="date"
-              min={format(new Date(), "yyyy-MM-dd")}
+              min={format(new Date(), 'yyyy-MM-dd')}
               max="2050-01-01"
               value={values.date}
               onChange={handleChange}
@@ -141,21 +141,21 @@ const EventForm = ({ submit, players }) => {
         )}
       </Formik>
     </>
-  );
-};
+  )
+}
 
 EventForm.propTypes = {
   submit: PropTypes.func.isRequired,
   players: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
-      name: PropTypes.name
+      name: PropTypes.name,
     })
-  )
-};
+  ),
+}
 
 EventForm.defaultProps = {
-  players: []
-};
+  players: [],
+}
 
-export default EventForm;
+export default EventForm

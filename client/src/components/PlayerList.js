@@ -1,5 +1,5 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const PlayerList = ({ members }) => {
   return (
@@ -19,16 +19,16 @@ const PlayerList = ({ members }) => {
         ))}
       </tbody>
     </table>
-  );
-};
+  )
+}
 
 PlayerList.propTypes = {
   members: PropTypes.arrayOf(
     PropTypes.shape({
       email: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired
+      name: PropTypes.string.isRequired,
     })
-  ).isRequired
-};
+  ).isRequired,
+}
 
-export default PlayerList;
+export default PlayerList

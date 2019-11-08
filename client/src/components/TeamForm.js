@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
-import Button from "./Button";
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import Button from './Button'
 
 const StyledInput = styled.input`
   font-size: 1em;
@@ -14,15 +14,15 @@ const StyledInput = styled.input`
   margin-bottom: 2px;
   box-sizing: border-box;
   background: none;
-`;
+`
 
 const TeamForm = ({ submit }) => {
-  const [name, setName] = useState("");
+  const [name, setName] = useState('')
 
   const handleInputChange = e => {
-    const { value } = e.target;
-    setName(value);
-  };
+    const { value } = e.target
+    setName(value)
+  }
 
   return (
     <>
@@ -37,18 +37,18 @@ const TeamForm = ({ submit }) => {
       <Button
         type="submit"
         onClick={() => {
-          submit(name);
-          setName("");
+          submit(name)
+          setName('')
         }}
       >
         Create Team
       </Button>
     </>
-  );
-};
+  )
+}
 
 TeamForm.propTypes = {
-  submit: PropTypes.func.isRequired
-};
+  submit: PropTypes.func.isRequired,
+}
 
-export default TeamForm;
+export default TeamForm

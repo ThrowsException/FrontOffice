@@ -1,13 +1,13 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
-import { Composition } from "atomic-layout";
-import { Link } from "react-router-dom";
+import React from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import { Composition } from 'atomic-layout'
+import { Link } from 'react-router-dom'
 
 const areas = `
   header
   content
-`;
+`
 
 const NavBar = styled.div`
   display: flex;
@@ -16,31 +16,30 @@ const NavBar = styled.div`
   padding: 0 1em;
   background: #1B1B1E
   color: white;
-`;
+`
 
 const NavTitle = styled.h4`
   flex: 1;
-`;
+`
 
 const Root = styled.div`
   display: flex;
   flex-flow: column wrap;
   place-items: center;
-`;
+`
 
 const Container = styled.div`
   flex: 1;
   width: 100%;
   max-width: 960px;
-`;
+`
 
 const NavLink = styled(Link)`
   color: white;
   padding: 8px;
-`;
+`
 
-const Layout = props => {
-  const { match } = props;
+const Layout = ({ match, children }) => {
   return (
     <Composition height="100vh" areas={areas} templateRows="auto 1fr">
       {({ Header, Content }) => (
@@ -62,29 +61,29 @@ const Layout = props => {
 
           <Content>
             <Root>
-              <Container>{props.children}</Container>
+              <Container>{children}</Container>
             </Root>
           </Content>
         </>
       )}
     </Composition>
-  );
-};
+  )
+}
 
 Layout.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
-      id: PropTypes.node
-    }).isRequired
+      id: PropTypes.node,
+    }).isRequired,
   }).isRequired,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node
-  ])
-};
+    PropTypes.node,
+  ]),
+}
 
 Layout.defaultProps = {
-  children: []
-};
+  children: [],
+}
 
-export default Layout;
+export default Layout

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export default styled.input`
   font-size: 1em;
@@ -8,7 +8,7 @@ export default styled.input`
   box-sizing: border-box;
   border-radius: 4px;
   border: 1px solid #ccc;
-`;
+`
 
 export const StyledSelect = styled.select`
   font-size: 1em;
@@ -17,4 +17,4 @@ export const StyledSelect = styled.select`
   border-radius: 4px;
   background: transparent;
   margin: 1em 0;
-`;
+`

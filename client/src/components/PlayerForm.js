@@ -1,40 +1,40 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
-import { Formik } from "formik";
-import Button from "./Button";
-import Input from "./Input";
+import React from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import { Formik } from 'formik'
+import Button from './Button'
+import Input from './Input'
 
 const StyledForm = styled.form`
   min-width: 320px;
   max-width: 960px;
   display: flex;
   flex-direction: column;
-`;
+`
 
 const validate = values => {
-  const errors = {};
+  const errors = {}
 
   if (!values.email) {
-    errors.email = "Required";
+    errors.email = 'Required'
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = "Invalid email address";
+    errors.email = 'Invalid email address'
   }
 
   if (!values.name) {
-    errors.name = "Required";
+    errors.name = 'Required'
   }
 
-  return errors;
-};
+  return errors
+}
 
 const PlayerForm = ({ submit }) => {
   return (
     <Formik
-      initialValues={{ name: "", email: "", phone: "" }}
+      initialValues={{ name: '', email: '', phone: '' }}
       onSubmit={(values, actions) => {
-        submit(values);
-        actions.setSubmitting(false);
+        submit(values)
+        actions.setSubmitting(false)
       }}
       validate={validate}
     >
@@ -45,7 +45,7 @@ const PlayerForm = ({ submit }) => {
         handleChange,
         handleBlur,
         handleSubmit,
-        isSubmitting
+        isSubmitting,
         /* and other goodies */
       }) => (
         <StyledForm onSubmit={handleSubmit}>
@@ -80,11 +80,11 @@ const PlayerForm = ({ submit }) => {
         </StyledForm>
       )}
     </Formik>
-  );
-};
+  )
+}
 
 PlayerForm.propTypes = {
-  submit: PropTypes.func.isRequired
-};
+  submit: PropTypes.func.isRequired,
+}
 
-export default PlayerForm;
+export default PlayerForm
