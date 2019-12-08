@@ -1,6 +1,6 @@
 from aiohttp import web
 
-from app.views import events, invites, members, teams
+from .views import events, invites, members, teams
 
 
 async def status(request):
