@@ -2,7 +2,7 @@
   "name": "client",
   "version": "0.0.1",
   "description": "Client for please rsvp",
-  "main": "index.js",
+  "main": "index.tsx",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "http-server",
@@ -36,7 +36,7 @@
     "webpack": "^4.35.3",
     "webpack-bundle-analyzer": "^3.3.2",
     "webpack-cli": "^3.3.6",
-    "webpack-dev-server": "^3.5.1",
+    "webpack-dev-server": "^3.9.0",
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
@@ -44,7 +44,7 @@
     "core-js": "^3.1.4",
     "date-fns": "^2.0.0-beta.2",
     "formik": "^1.5.8",
-    "framer-motion": "^1.2.4",
+    "framer-motion": "^1.6.17",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",

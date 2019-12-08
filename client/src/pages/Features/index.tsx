@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import { Composition } from 'atomic-layout'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
@@ -14,9 +14,9 @@ const variants = {
   hidden: { opacity: 0 },
 }
 
-const MotionRoot = motion.custom(Root)
+const MotionRoot = motion.custom<{ children: React.ReactNode }>(Root)
 
-export default () => (
+const Features = () => (
   <Composition areas={areas}>
     {({ Header, Content }) => (
       <>
@@ -120,3 +120,5 @@ export default () => (
     )}
   </Composition>
 )
+
+export default Features

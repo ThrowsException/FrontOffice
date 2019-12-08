@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import ReactDOM from 'react-dom'
+import * as React from 'react'
+import * as ReactDOM from 'react-dom'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import TeamDetails from './pages/TeamDetails'
 import Teams from './pages/Teams'
@@ -21,18 +21,18 @@ const config = {
 
 Amplify.configure(config)
 
-const listener = data => {
+const listener = (data: any) => {
   switch (data.payload.event) {
     case 'signIn':
-      document.location = '/teams'
+      document.location.href = '/teams'
       break
   }
 }
 
 Hub.listen('auth', listener)
 
-const PrivateRoutes = props => {
-  const [team, setTeam] = useState()
+const PrivateRoutes = () => {
+  const [team, setTeam] = React.useState()
 
   return (
     <TeamContext.Provider value={{ team, setTeam }}>
@@ -63,4 +63,4 @@ function AppRouter() {
 
 export default AppRouter
 
-ReactDOM.render(<AppRouter />, document.getElementById('root'))
+ReactDOM.render(<AppRouter />, document.getElementById('app'))
