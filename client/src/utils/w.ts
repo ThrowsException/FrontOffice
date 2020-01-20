@@ -1,7 +1,7 @@
-import wretch from 'wretch'
+import wretch, { Wretcher } from 'wretch'
 import { Auth } from 'aws-amplify'
 
-let api = {}
+let api: Wretcher
 
 if (process.env.NODE_ENV === 'production') {
   api = wretch()
@@ -19,7 +19,7 @@ if (process.env.NODE_ENV === 'production') {
     })
 }
 
-export const postData = async (url, body) => {
+export const postData = async (url: string, body: any) => {
   let token = await Auth.currentSession()
   return api
     .options({ context: { token } })
@@ -28,7 +28,10 @@ export const postData = async (url, body) => {
     .json()
 }
 
-export const fetchData = async (url, callback) => {
+export const fetchData = async (
+  url: string,
+  callback: (data: { [key: string]: any }) => void
+) => {
   let token = await Auth.currentSession()
   await api
     .options({ context: { token } })
