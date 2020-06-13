@@ -1,13 +1,21 @@
 import json
+import os
 
 from aiohttp import web
 import jwt
+import uuid
 
 
 def authorize(request):
     """
     Check aws jwt
     """
+
+    print(os.getenv("ENV"))
+    if os.getenv("ENV") == "dev":
+        request["user_id"] = uuid.uuid4()
+        return
+
     keys = request.app["cognito_keys"]
     authorization_header = request.headers["Authorization"]
     token = authorization_header.split(" ")[1]

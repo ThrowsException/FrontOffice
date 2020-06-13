@@ -1,3 +1,4 @@
+import arrow
 import pytest
 
 from app.app import make_app
@@ -16,11 +17,11 @@ async def test_get_value(cli):
 
 
 async def test_invite(cli):
-    resp = await cli.post("/api/teams", json={"name": "Spitfires"})
+    resp = await cli.post("/teams", json={"name": "Spitfires"})
     team_resp = await resp.json()
 
     member = await cli.post(
-        "/api/members",
+        "/members",
         json={
             "name": "John Smith",
             "email": "blah@localhost.com",
@@ -31,39 +32,62 @@ async def test_invite(cli):
     member_resp = await member.json()
 
     event = await cli.post(
-        "/api/events", json={"name": "Game", "team": team_resp["id"]}
+        "/events",
+        json={
+            "name": "Game",
+            "team": team_resp["id"],
+            "date": arrow.utcnow().format("YYYY-MM-DD HH:mm:ss ZZ"),
+            "refreshments": member_resp["id"],
+            "reminder": 0,
+        },
     )
     event_resp = await event.json()
 
     invite = await cli.post(
-        "/api/invites", json={"event": event_resp["id"], "member": member_resp["id"]}
+        "/invites", json={"event": event_resp["id"], "member": member_resp["id"]}
     )
 
     assert invite.status == 200
 
 
 async def test_post_team(cli):
-    resp = await cli.post("/api/teams", json={"name": "Spitfires"})
+    resp = await cli.post("/teams", json={"name": "Spitfires"})
     assert resp.status == 200
 
 
 async def test_post_event(cli):
-    resp = await cli.post("/api/teams", json={"name": "Spitfires"})
+    resp = await cli.post("/teams", json={"name": "Spitfires"})
     group = await resp.json()
 
-    resp = await cli.post("/api/events", json={"name": "Game", "team": group["id"]})
+    member = await cli.post(
+        "/members",
+        json={
+            "name": "John Smith",
+            "email": "blah@localhost.com",
+            "phone": "2222222222",
+            "team": group["id"],
+        },
+    )
+    member_resp = await member.json()
+
+    resp = await cli.post(
+        "/events",
+        json={
+            "name": "Game",
+            "team": group["id"],
+            "date": arrow.utcnow().format("YYYY-MM-DD HH:mm:ss ZZ"),
+            "refreshments": member_resp["id"],
+            "reminder": 0,
+        },
+    )
     assert resp.status == 200
 
 
-async def test_post_login_401(cli):
-    resp = await cli.post(
-        "/api/login", json={"username": "test", "password": "password"}
-    )
-    assert resp.status == 401
+# async def test_post_login_401(cli):
+#     resp = await cli.post("/login", json={"username": "test", "password": "password"})
+#     assert resp.status == 401
 
 
-async def test_post_login(cli):
-    resp = await cli.post(
-        "/api/login", json={"username": "admin", "password": "password"}
-    )
-    assert resp.status == 200
+# async def test_post_login(cli):
+#     resp = await cli.post("/login", json={"username": "admin", "password": "password"})
+#     assert resp.status == 200

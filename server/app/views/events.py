@@ -33,35 +33,34 @@ class TeamEvents(web.View, CorsViewMixin):
         """
 
         items = []
-        async with self.request.app["db_pool"].acquire() as conn:
-            async with conn.cursor() as cur:
-                await cur.execute(sql, (team_id))
-                result = await cur.fetchall()
-                items = [
-                    {
-                        "id": x[0],
-                        "name": x[1],
-                        "date": arrow.Arrow.fromdatetime(x[2]).format(),
-                        "team": x[3],
-                    }
-                    for x in result
-                ]
+        async with self.request.app["db_pool"].cursor() as cur:
+            await cur.execute(sql, (team_id))
+            result = await cur.fetchall()
+            items = [
+                {
+                    "id": x[0],
+                    "name": x[1],
+                    "date": arrow.Arrow.fromdatetime(x[2]).format(),
+                    "team": x[3],
+                }
+                for x in result
+            ]
 
-                for event in items:
-                    await cur.execute(members_sql, (event["id"], team_id))
-                    result = await cur.fetchall()
-                    if result:
-                        event["replies"] = [
-                            {
-                                "id": x[0],
-                                "name": x[1],
-                                "email": x[2],
-                                "invite_id": x[3],
-                                "reply": x[4],
-                                "event": x[5],
-                            }
-                            for x in result
-                        ]
+            for event in items:
+                await cur.execute(members_sql, (event["id"], team_id))
+                result = await cur.fetchall()
+                if result:
+                    event["replies"] = [
+                        {
+                            "id": x[0],
+                            "name": x[1],
+                            "email": x[2],
+                            "invite_id": x[3],
+                            "reply": x[4],
+                            "event": x[5],
+                        }
+                        for x in result
+                    ]
 
         return web.json_response(items)
 
